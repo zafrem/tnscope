@@ -1,2 +1,2 @@
-# tnsscrope
+# tnscope
 Trust and Safety

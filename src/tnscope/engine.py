@@ -76,6 +76,7 @@ class Engine:
 
         context_rules = self.data.context_rules.get(lang, [])
         prepared = self._context[lang]
+        ambiguous_min = float(self.data.scoring.get("router", {}).get("ambiguous_min", 0.5))
         results: list[SentenceResult] = []
         mask_spans: list[tuple[int, int]] = []
         for (s, e), items in zip(sentences, per_sentence):
@@ -90,8 +91,22 @@ class Engine:
                 for c, ms in groups.items()
             }
             ids = {c: sorted({m.entry.id for m in ms}) for c, ms in groups.items()}
-            detections: list[Detection] = []
+            signals = {
+                c: {
+                    "ambiguous": any(m.entry.ambiguity >= ambiguous_min for m in ms),
+                    "requires_context": any(m.entry.requires_context for m in ms),
+                }
+                for c, ms in groups.items()
+            }
+            # One detection per (original span, concept): the highest-rank entry.
+            unique: dict[tuple, tuple] = {}
             for m, span in items:
+                key = (span, m.entry.concept)
+                prev = unique.get(key)
+                if prev is None or m.entry.rank > prev[0].entry.rank:
+                    unique[key] = (m, span)
+            detections: list[Detection] = []
+            for m, span in unique.values():
                 score = scores[m.entry.concept]
                 label, action = thresholds.action_for(score, m.entry.category)
                 detections.append(
@@ -104,6 +119,7 @@ class Engine:
                         action=action,
                         stage_reached=1,
                         matched_entry_ids=ids[m.entry.concept],
+                        signals=dict(signals[m.entry.concept]),
                     )
                 )
                 if score >= mask_min_score:

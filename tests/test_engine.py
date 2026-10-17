@@ -81,7 +81,9 @@ def test_detections_validate_against_schema():
     dets = [d for s in r.sentences for d in s.detections]
     assert dets
     for d in dets:
-        jsonschema.validate(d.model_dump(mode="json"), schema)
+        dumped = d.model_dump(mode="json")
+        assert set(dumped["signals"]) == {"ambiguous", "requires_context"}
+        jsonschema.validate(dumped, schema)
 
 
 def test_each_language_smoke():
@@ -91,8 +93,7 @@ def test_each_language_smoke():
             continue
         entries = eng.data.lexicon.get(lang) or []
         hate = [e for e in entries if e.category == "hate" and e.type == "literal"]
-        if not hate:
-            continue
+        assert hate, lang
         term = hate[0].term
         r = eng.scan(term, lang)
         assert sum(len(s.detections) for s in r.sentences) >= 1, (lang, term)
@@ -211,3 +212,76 @@ def test_mask_min_score_non_finite_rejected(bad):
     with pytest.raises(ValueError) as ei:
         scan("secret wetback text", "en", mask_min_score=bad)
     assert "secret" not in str(ei.value)
+
+
+def _dets(r):
+    return [d for s in r.sentences for d in s.detections]
+
+
+def test_signals_default_false():
+    d = _dets(scan("You are disgusting scum.", "en"))[0]
+    assert d.signals == {"ambiguous": False, "requires_context": False}
+
+
+def test_signals_ambiguous_and_requires_context():
+    d = _dets(scan("He is a fraudster.", "en"))[0]
+    assert d.signals == {"ambiguous": True, "requires_context": True}
+
+
+def test_signals_do_not_cap_actions():
+    d = _dets(scan("Go back, wetback.", "en", thresholds=Thresholds(block=40, review=30, flag=20)))[0]
+    assert d.action == "block"
+    d = _dets(scan("He is a fraudster.", "en", thresholds=Thresholds(block=1, review=1, flag=1, category_block_min={})))[0]
+    assert d.signals["ambiguous"] and d.action == "block"
+
+
+def test_duplicate_span_concept_deduped(custom_data):
+    root = custom_data("hate", "en", [
+        {"id": "hate_en_9003", "concept": 2001, "term": "slurz", "type": "literal",
+         "rank": 3, "ambiguity": 0.0, "flags": ["IGNORECASE"]},
+        {"id": "hate_en_9004", "concept": 2001, "term": "slurz", "type": "literal",
+         "rank": 5, "ambiguity": 0.6, "requires_context": True, "flags": ["IGNORECASE"]},
+    ])
+    r = Engine(data_dir=root).scan("a slurz b", "en")
+    dets = _dets(r)
+    assert len(dets) == 1
+    assert dets[0].span == (2, 7)
+    assert dets[0].matched_entry_ids == ["hate_en_9003", "hate_en_9004"]
+    assert dets[0].signals == {"ambiguous": True, "requires_context": True}
+    assert r.sentences[0].rank == 5
+
+
+def test_hate_and_defamation_in_one_sentence():
+    r = scan("You wetback, disgusting scum.", "en")
+    assert len(r.sentences) == 1
+    dets = r.sentences[0].detections
+    assert sorted(d.category for d in dets) == ["defamation", "hate"]
+    hate = next(d for d in dets if d.category == "hate")
+    dfm = next(d for d in dets if d.category == "defamation")
+    assert hate.matched_entry_ids == ["hate_en_0005"]
+    assert dfm.matched_entry_ids == ["defamation_en_0004"]
+    assert hate.score == 90.0 and dfm.score == 42.0
+    assert r.sentences[0].top_score == 90.0
+
+
+def test_defamation_87_is_review(custom_data):
+    root = custom_data("defamation", "en", [{
+        "id": "defamation_en_9005", "concept": 1001, "term": "slurd", "type": "literal",
+        "rank": 5, "ambiguity": 0.13, "flags": ["IGNORECASE"],
+    }])
+    d = _dets(Engine(data_dir=root).scan("a slurd b", "en"))[0]
+    assert d.score == 87.0
+    assert (d.label, d.action) == ("probable", "review")
+
+
+def test_mask_min_score_equal_to_score_masks():
+    assert scan("Go back, wetback.", "en", mask_min_score=90).masked_text == "Go back, *******."
+    assert scan("Go back, wetback.", "en", mask_min_score=90.01).masked_text == "Go back, wetback."
+
+
+def test_quoted_sentence_context_not_leaking():
+    r = scan('He said "you are a wetback." Never mind.', "en")
+    assert len(r.sentences) == 2
+    d = r.sentences[0].detections[0]
+    assert d.score == 100.0  # 90 + target_person 15, capped; "never" is in sentence 2
+    assert r.sentences[1].detections == []

@@ -6,6 +6,10 @@ import sys
 from tnscope.cli import main
 
 
+def _stdin(data: bytes):
+    return io.TextIOWrapper(io.BytesIO(data), encoding="utf-8")
+
+
 def _actions(data):
     return [d["action"] for s in data["sentences"] for d in s["detections"]]
 
@@ -25,7 +29,7 @@ def test_human_output(capsys):
 
 
 def test_stdin(monkeypatch, capsys):
-    monkeypatch.setattr(sys, "stdin", io.StringIO("Go back, wetback."))
+    monkeypatch.setattr(sys, "stdin", _stdin(b"Go back, wetback."))
     assert main(["scan", "--lang", "en", "--json"]) == 0
     assert json.loads(capsys.readouterr().out)["masked_text"] == "Go back, *******."
 
@@ -63,7 +67,7 @@ def test_unsupported_lang(capsys):
 
 
 def test_empty_stdin(monkeypatch, capsys):
-    monkeypatch.setattr(sys, "stdin", io.StringIO(""))
+    monkeypatch.setattr(sys, "stdin", _stdin(b""))
     assert main(["scan", "--lang", "en", "--json"]) == 0
     data = json.loads(capsys.readouterr().out)
     assert data["sentences"] == [] and data["masked_text"] == ""
@@ -90,3 +94,25 @@ def test_python_dash_m():
     )
     assert r.returncode == 0
     assert json.loads(r.stdout)["masked_text"] == "Go back, *******."
+
+
+def test_invalid_utf8_stdin(monkeypatch, capsys):
+    monkeypatch.setattr(sys, "stdin", _stdin(b"abc \xff\xfe"))
+    assert main(["scan", "--lang", "en"]) == 2
+    err = capsys.readouterr().err
+    assert err.strip() and "Traceback" not in err and "abc" not in err
+    assert len(err.strip().splitlines()) == 1
+
+
+def test_invalid_utf8_file(tmp_path, capsys):
+    p = tmp_path / "bad.txt"
+    p.write_bytes(b"abc \xff\xfe")
+    assert main(["scan", "--lang", "en", "--file", str(p)]) == 2
+    err = capsys.readouterr().err
+    assert err.strip() and "Traceback" not in err and "abc" not in err
+
+
+def test_non_ascii_stdin(monkeypatch, capsys):
+    monkeypatch.setattr(sys, "stdin", _stdin("wetback 한국어".encode()))
+    assert main(["scan", "--lang", "en", "--json"]) == 0
+    assert json.loads(capsys.readouterr().out)["masked_text"] == "******* 한국어"

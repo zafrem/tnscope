@@ -41,15 +41,18 @@ def _run(args) -> int:
         return 2
     if args.text is not None:
         text = args.text
-    elif args.file is not None:
-        try:
-            with open(args.file, encoding="utf-8") as f:
-                text = f.read()
-        except (OSError, UnicodeDecodeError) as e:
-            print(f"tnscope: error: cannot read file ({type(e).__name__})", file=sys.stderr)
-            return 2
     else:
-        text = sys.stdin.read()
+        try:
+            if args.file is not None:
+                with open(args.file, "rb") as f:
+                    raw = f.read()
+            else:
+                raw = sys.stdin.buffer.read()
+            text = raw.decode("utf-8")
+        except (OSError, UnicodeDecodeError) as e:
+            what = "file" if args.file is not None else "stdin"
+            print(f"tnscope: error: cannot read {what} ({type(e).__name__})", file=sys.stderr)
+            return 2
 
     overrides = {
         k: v for k, v in (("block", args.block), ("review", args.review), ("flag", args.flag))

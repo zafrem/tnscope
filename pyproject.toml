@@ -8,7 +8,24 @@ version = "0.1.0"
 description = "Trust and safety text scanner (hate, defamation)"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = ["pydantic>=2", "PyYAML", "pyahocorasick", "google-re2"]
+dependencies = [
+    "pydantic>=2.14.1",
+    "PyYAML>=6.0.3",
+    "pyahocorasick>=2.3.1",
+    "google-re2>=1.1.20251105",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Text Processing :: Linguistic",
+    "Typing :: Typed",
+]
 
 [project.optional-dependencies]
 dev = ["pytest", "jsonschema"]
@@ -18,7 +35,10 @@ tnscope = "tnscope.cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/tnscope"]
-include = ["src/tnscope/_data/**"]
+include = ["src/tnscope/_data/**", "src/tnscope/py.typed"]
+
+[tool.hatch.build.targets.sdist]
+exclude = [".superpowers", "dist", ".venv", ".pytest_cache", "**/__pycache__"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

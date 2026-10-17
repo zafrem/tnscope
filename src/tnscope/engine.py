@@ -1,6 +1,7 @@
 """Engine: ties normalize, match, sentences, scoring and masking together."""
 from __future__ import annotations
 
+import math
 from bisect import bisect_right
 from pathlib import Path
 
@@ -19,6 +20,7 @@ class Engine:
         self._matchers = {
             lang: Matcher(self.data.lexicon.get(lang, [])) for lang in self.data.languages
         }
+        self.default_thresholds = Thresholds.from_scoring(self.data.scoring)
         self._context = {
             lang: prepare_context(self.data.context_rules.get(lang, []))
             for lang in self.data.languages
@@ -30,14 +32,26 @@ class Engine:
         lang: str,
         *,
         thresholds: Thresholds | None = None,
-        mask_min_score: float = 35.0,
+        mask_min_score: float | None = None,
         mask_char: str = "*",
     ) -> ScanResult:
+        """Scan ``text`` (language ``lang``).
+
+        ``thresholds`` defaults to the data's scoring.yml ladder
+        (:attr:`default_thresholds`); ``mask_min_score`` defaults to the
+        effective thresholds' ``flag`` value.
+        """
         if lang not in self._matchers:
             raise ValueError(
                 f"unsupported language; supported languages: {', '.join(sorted(self._matchers))}"
             )
-        thresholds = thresholds or Thresholds()
+        thresholds = thresholds or self.default_thresholds
+        if mask_min_score is None:
+            mask_min_score = thresholds.flag
+        elif isinstance(mask_min_score, bool) or not isinstance(mask_min_score, (int, float)):
+            raise ValueError("mask_min_score must be a finite number")
+        elif not math.isfinite(mask_min_score):
+            raise ValueError("mask_min_score must be a finite number")
         version = self.data.data_version
         if not text.strip():
             return ScanResult(sentences=[], masked_text=text, data_version=version)
@@ -112,8 +126,14 @@ class Engine:
 _default: Engine | None = None
 
 
-def scan(text: str, lang: str, **kwargs) -> ScanResult:
+def default_engine() -> Engine:
+    """The lazily created module-level Engine over the bundled data."""
     global _default
     if _default is None:
         _default = Engine()
-    return _default.scan(text, lang, **kwargs)
+    return _default
+
+
+def scan(text: str, lang: str, **kwargs) -> ScanResult:
+    """Scan with the default engine; keyword arguments go to :meth:`Engine.scan`."""
+    return default_engine().scan(text, lang, **kwargs)

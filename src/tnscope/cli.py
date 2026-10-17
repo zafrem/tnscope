@@ -3,9 +3,12 @@
 from __future__ import annotations
 
 import argparse
+import math
 import sys
 
-from tnscope.engine import scan
+from pydantic import ValidationError
+
+from tnscope.engine import default_engine
 from tnscope.models import Thresholds
 
 
@@ -13,6 +16,16 @@ class _Parser(argparse.ArgumentParser):
     def error(self, message):  # argparse messages never echo positional input text
         self.print_usage(sys.stderr)
         self.exit(2, f"tnscope: error: {message}\n")
+
+
+def _finite(value: str) -> float:
+    try:
+        x = float(value)
+    except ValueError:
+        raise argparse.ArgumentTypeError("must be a number") from None
+    if not math.isfinite(x):
+        raise argparse.ArgumentTypeError("must be a finite number")
+    return x
 
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -23,11 +36,12 @@ def _build_parser() -> argparse.ArgumentParser:
     s.add_argument("--lang", required=True)
     s.add_argument("--file", default=None)
     s.add_argument("--json", action="store_true")
-    s.add_argument("--mask-min", type=float, default=35.0)
+    s.add_argument("--mask-min", type=_finite, default=None,
+                   help="mask detections with score >= this (default: the flag threshold)")
     s.add_argument("--mask-char", default="*")
-    s.add_argument("--block", type=float, default=None)
-    s.add_argument("--review", type=float, default=None)
-    s.add_argument("--flag", type=float, default=None)
+    s.add_argument("--block", type=_finite, default=None)
+    s.add_argument("--review", type=_finite, default=None)
+    s.add_argument("--flag", type=_finite, default=None)
     return p
 
 
@@ -59,10 +73,22 @@ def _run(args) -> int:
         if v is not None
     }
     try:
-        result = scan(
+        engine = default_engine()
+        thresholds = None
+        if overrides:
+            base = engine.default_thresholds.model_dump()
+            try:
+                thresholds = Thresholds(**{**base, **overrides})
+            except ValidationError:
+                print(
+                    "tnscope: error: invalid thresholds: need flag <= review <= block",
+                    file=sys.stderr,
+                )
+                return 2
+        result = engine.scan(
             text,
             args.lang,
-            thresholds=Thresholds(**overrides),
+            thresholds=thresholds,
             mask_min_score=args.mask_min,
             mask_char=args.mask_char,
         )

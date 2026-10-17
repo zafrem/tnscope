@@ -3,6 +3,8 @@ import json
 import subprocess
 import sys
 
+import pytest
+
 from tnscope.cli import main
 
 
@@ -116,3 +118,32 @@ def test_non_ascii_stdin(monkeypatch, capsys):
     monkeypatch.setattr(sys, "stdin", _stdin("wetback 한국어".encode()))
     assert main(["scan", "--lang", "en", "--json"]) == 0
     assert json.loads(capsys.readouterr().out)["masked_text"] == "******* 한국어"
+
+
+@pytest.mark.parametrize("opt", ["--mask-min", "--flag", "--review", "--block"])
+@pytest.mark.parametrize("val", ["nan", "inf", "-inf"])
+def test_non_finite_numeric_options(opt, val, capsys):
+    secret = "SECRET wetback"
+    assert main(["scan", secret, "--lang", "en", opt, val]) == 2
+    err = capsys.readouterr().err
+    assert err.strip() and "SECRET" not in err and "Traceback" not in err
+    errors = [ln for ln in err.splitlines() if ln.startswith("tnscope: error:")]
+    assert len(errors) == 1 and err.rstrip().endswith(errors[0])
+
+
+def test_inconsistent_thresholds_exit_2(capsys):
+    secret = "SECRET wetback"
+    assert main(["scan", secret, "--lang", "en", "--flag", "70"]) == 2
+    err = capsys.readouterr().err
+    assert len(err.strip().splitlines()) == 1
+    assert "flag <= review <= block" in err and "SECRET" not in err
+
+
+def test_lower_flag_moves_mask_default(capsys):
+    main(["scan", "Never say wetback.", "--lang", "en", "--json",
+          "--block", "100", "--review", "90", "--flag", "75"])
+    data = json.loads(capsys.readouterr().out)
+    assert _actions(data) == ["pass"]
+    assert data["masked_text"] == "Never say wetback."
+    main(["scan", "Never say wetback.", "--lang", "en", "--json", "--flag", "20"])
+    assert json.loads(capsys.readouterr().out)["masked_text"] == "Never say *******."

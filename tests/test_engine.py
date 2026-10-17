@@ -162,3 +162,52 @@ def test_long_input_is_linear():
         assert [(d.span[0] - off, d.span[1] - off, d.score, d.action) for d in s.detections] == [
             (*d.span, d.score, d.action) for d in ref.detections
         ]
+
+
+def _custom_scoring(root, **ladder):
+    import yaml
+
+    path = root / "scoring" / "scoring.yml"
+    doc = yaml.safe_load(path.read_text(encoding="utf-8"))
+    for row in doc["thresholds"]:
+        if row["action"] in ladder:
+            row["min"] = ladder[row["action"]]
+    path.write_text(yaml.safe_dump(doc), encoding="utf-8")
+    return root
+
+
+def test_default_thresholds_come_from_data(custom_data):
+    root = _custom_scoring(custom_data.root, block=95, review=70)
+    eng = Engine(data_dir=root)
+    assert eng.default_thresholds.block == 95
+    d = eng.scan("Go back, wetback.", "en").sentences[0].detections[0]
+    assert d.score == 90.0 and d.action == "review"
+
+
+def _low_rank_root(custom_data):
+    return custom_data("hate", "en", [{
+        "id": "hate_en_9002", "concept": 2001, "term": "slurq", "type": "literal",
+        "rank": 1, "ambiguity": 0.0, "flags": ["IGNORECASE", "WORD_BOUNDARY"],
+    }])
+
+
+def test_mask_default_follows_flag(custom_data):
+    eng = Engine(data_dir=_low_rank_root(custom_data))
+    r = eng.scan("a slurq b", "en")
+    assert r.sentences[0].detections[0].score == 20.0
+    assert r.masked_text == "a slurq b"
+    r = eng.scan("a slurq b", "en", thresholds=Thresholds(flag=15))
+    assert r.masked_text == "a ***** b"
+    assert r.sentences[0].detections[0].action == "flag"
+
+
+def test_mask_default_follows_data_flag(custom_data):
+    root = _custom_scoring(_low_rank_root(custom_data), flag=10)
+    assert Engine(data_dir=root).scan("a slurq b", "en").masked_text == "a ***** b"
+
+
+@pytest.mark.parametrize("bad", [float("nan"), float("inf"), float("-inf")])
+def test_mask_min_score_non_finite_rejected(bad):
+    with pytest.raises(ValueError) as ei:
+        scan("secret wetback text", "en", mask_min_score=bad)
+    assert "secret" not in str(ei.value)

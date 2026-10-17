@@ -32,6 +32,10 @@ def _apply(chars: list[str], origin: list[int], rule: dict):
         keep = [i for i, c in enumerate(chars) if c not in drop]
     elif kind == "map":
         mapping = rule["mapping"]
+        if any(len(k) != 1 or len(v) != 1 for k, v in mapping.items()):
+            raise ValueError(
+                f"map rule {rule.get('id', '<no id>')!r}: keys and values must be single characters"
+            )
         return [mapping.get(c, c) for c in chars], origin
     elif kind == "nfkc":
         nc: list[str] = []

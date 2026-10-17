@@ -15,6 +15,11 @@ def main(argv: list[str]) -> int:
         return 2
     src = Path(argv[1]).resolve()
     dest = Path(__file__).resolve().parent.parent / "src" / "tnscope" / "_data"
+    missing = [d for d in DIRS if not (src / d).is_dir()]
+    missing += [f for f in FILES if not (src / f).is_file()]
+    if missing:
+        print(f"vendor_data.py: source is missing: {', '.join(missing)}", file=sys.stderr)
+        return 2
     if dest.exists():
         shutil.rmtree(dest)
     dest.mkdir(parents=True)

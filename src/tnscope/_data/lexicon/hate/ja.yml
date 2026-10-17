@@ -1,0 +1,28 @@
+namespace: hate.ja
+lang: ja
+entries:
+  - {id: hate_ja_0001, concept: 2005, term: 国へ帰れ, type: phrase, rank: 4, ambiguity: 0.3}
+  - {id: hate_ja_0002, concept: 2001, term: チョンコ, type: literal, rank: 5, ambiguity: 0.1}
+  - {id: hate_ja_0003, concept: 2001, term: シナ人, type: literal, rank: 5, ambiguity: 0.2}
+  - {id: hate_ja_0004, concept: 2001, term: 在日ゴキブリ, type: literal, rank: 5, ambiguity: 0.1}
+  - {id: hate_ja_0005, concept: 2001, term: 土人, type: literal, rank: 5, ambiguity: 0.25}
+  - {id: hate_ja_0006, concept: 2001, term: 劣等民族, type: literal, rank: 5, ambiguity: 0.15}
+  - {id: hate_ja_0007, concept: 2002, term: ホモ野郎, type: literal, rank: 5, ambiguity: 0.15}
+  - {id: hate_ja_0008, concept: 2002, term: オカマ野郎, type: literal, rank: 5, ambiguity: 0.15}
+  - {id: hate_ja_0009, concept: 2002, term: 女は劣等生物, type: literal, rank: 5, ambiguity: 0.1}
+  - {id: hate_ja_0010, concept: 2002, term: 同性愛者は異常者, type: literal, rank: 5, ambiguity: 0.1}
+  - {id: hate_ja_0011, concept: 2002, term: 男尊女卑が当然, type: literal, rank: 4, ambiguity: 0.25}
+  - {id: hate_ja_0012, concept: 2003, term: 邪教信者め, type: literal, rank: 5, ambiguity: 0.2}
+  - {id: hate_ja_0013, concept: 2003, term: イスラム教徒はテロリスト, type: literal, rank: 5, ambiguity: 0.1}
+  - {id: hate_ja_0014, concept: 2003, term: カルト信者は消えろ, type: literal, rank: 5, ambiguity: 0.15}
+  - {id: hate_ja_0015, concept: 2003, term: モスクを焼き払え, type: literal, rank: 5, ambiguity: 0.1}
+  - {id: hate_ja_0016, concept: 2003, term: 宗教寄生虫, type: literal, rank: 5, ambiguity: 0.15}
+  - {id: hate_ja_0017, concept: 2004, term: 片輪者, type: literal, rank: 5, ambiguity: 0.15}
+  - {id: hate_ja_0018, concept: 2004, term: 障害者は社会の荷物, type: literal, rank: 5, ambiguity: 0.1}
+  - {id: hate_ja_0019, concept: 2004, term: 知恵遅れ, type: literal, rank: 5, ambiguity: 0.15}
+  - {id: hate_ja_0020, concept: 2004, term: めくらめ, type: literal, rank: 5, ambiguity: 0.15}
+  - {id: hate_ja_0021, concept: 2004, term: 障害者は安楽死させろ, type: literal, rank: 5, ambiguity: 0.1}
+  - {id: hate_ja_0022, concept: 2005, term: 外国人は日本から出て行け, type: literal, rank: 4, ambiguity: 0.2}
+  - {id: hate_ja_0023, concept: 2005, term: 移民を全員追放しろ, type: literal, rank: 4, ambiguity: 0.2}
+  - {id: hate_ja_0024, concept: 2005, term: 外国人お断り出て行け, type: literal, rank: 4, ambiguity: 0.2}
+  - {id: hate_ja_0025, concept: 2005, term: 難民を叩き出せ, type: literal, rank: 4, ambiguity: 0.2}

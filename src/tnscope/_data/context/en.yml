@@ -1,0 +1,7 @@
+lang: en
+rules:
+  - {id: en_news_report, type: news_report, terms: [reported, according to, allegedly, police arrested, authorities warned, news report], adjust: -15}
+  - {id: en_negation, type: negation, terms: [never, not a, do not fall for, beware of, watch out for, scam alert, is a scam], adjust: -20}
+  - {id: en_quotation, type: quotation, terms: [quoted, said that, called me, example of, slurs like, phrases such as], adjust: -10}
+  - {id: en_target_person, type: target_person, terms: [you are a, your family, kill yourself, you deserve to, i will ruin you], adjust: 15}
+  - {id: en_imperative, type: imperative, terms: [act now, hurry up, send immediately, transfer now, click immediately, do it now], adjust: 10}

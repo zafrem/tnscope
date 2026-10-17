@@ -1,0 +1,7 @@
+lang: zh-hans
+rules:
+  - {id: zh_hans_news_report, type: news_report, terms: [据报道, 根据, 警方通报, 涉嫌犯罪被捕, 新闻报道], adjust: -15}
+  - {id: zh_hans_negation, type: negation, terms: [千万不要, 不是, 请注意防范, 谨防受骗, 切勿相信, 防骗提醒], adjust: -20}
+  - {id: zh_hans_quotation, type: quotation, terms: [引用, 说道, 骂道, 举例说, 这句话], adjust: -10}
+  - {id: zh_hans_target_person, type: target_person, terms: [你是, 你全家, 你这个, 像你这种, 去死吧], adjust: 15}
+  - {id: zh_hans_imperative, type: imperative, terms: [立即转账, 马上联系, 立刻汇款, 赶紧加, 限时领取], adjust: 10}

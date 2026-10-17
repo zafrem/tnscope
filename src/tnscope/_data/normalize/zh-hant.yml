@@ -1,0 +1,20 @@
+lang: zh-hant
+rules:
+  - id: zh_hant_nfkc
+    type: nfkc
+  - id: zh_hant_strip_invisible
+    type: strip
+    chars: ["\u200B", "\u200C", "\u200D", "\uFEFF", "\u2060", "\u00AD"]
+  - id: zh_hant_strip_inserted_symbols
+    type: strip_between
+    chars: [".", "-", "*", " ", "·", "_", "~", "/"]
+    between: "一-\u9FFF"
+  - id: zh_hant_collapse_repeats
+    type: collapse_repeats
+    max_run: 2
+fixtures:
+  - {input: "穩*賺*不*賠", expected: "穩賺不賠"}
+  - {input: "穩 賺 不 賠", expected: "穩賺不賠"}
+  - {input: "穩_賺~不/賠", expected: "穩賺不賠"}
+  - {input: "騙\u200B子", expected: "騙子"}
+  - {input: "加微信信信", expected: "加微信信"}

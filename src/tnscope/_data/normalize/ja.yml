@@ -1,0 +1,20 @@
+lang: ja
+rules:
+  - id: ja_nfkc
+    type: nfkc
+  - id: ja_strip_invisible
+    type: strip
+    chars: ["\u200B", "\u200C", "\u200D", "\uFEFF", "\u2060", "\u00AD"]
+  - id: ja_strip_inserted_symbols
+    type: strip_between
+    chars: [".", "-", "*", "・", "_", "~", "/"]
+    between: "\u3040-ヿ一-\u9FFF"
+  - id: ja_collapse_repeats
+    type: collapse_repeats
+    max_run: 2
+fixtures:
+  - {input: "ﾏﾈｰ", expected: "マネー"}
+  - {input: "元.本.保.証", expected: "元本保証"}
+  - {input: "元_本~保/証", expected: "元本保証"}
+  - {input: "詐\u200B欺師", expected: "詐欺師"}
+  - {input: "死ねえええ", expected: "死ねええ"}

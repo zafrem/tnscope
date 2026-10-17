@@ -1,0 +1,11 @@
+schema_version: 1
+data_version: "0.1.0"
+languages: [en, ko, ja, zh-hans, zh-hant]
+pseudo_languages: [und]
+categories:
+  defamation: 1
+  hate: 2
+  fraud: 3
+  illegal: 4
+  cross_cutting: 9
+actions: [block, review, flag, pass]

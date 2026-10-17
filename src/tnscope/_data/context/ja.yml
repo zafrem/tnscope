@@ -1,0 +1,7 @@
+lang: ja
+rules:
+  - {id: ja_news_report, type: news_report, terms: [報道, によると, 警察によると, 容疑で逮捕, ニュースで], adjust: -15}
+  - {id: ja_negation, type: negation, terms: [絶対にしない, ではありません, 注意してください, 気をつけて, 騙されないで, 詐欺注意], adjust: -20}
+  - {id: ja_quotation, type: quotation, terms: [と言って, と発言, 引用, という言葉, の例として], adjust: -10}
+  - {id: ja_target_person, type: target_person, terms: [お前は, あんたは, お前の家族, お前みたいな, 死ね], adjust: 15}
+  - {id: ja_imperative, type: imperative, terms: [今すぐ, 直ちに, すぐ連絡, 急いで送金, すぐに振込], adjust: 10}

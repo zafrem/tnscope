@@ -1,0 +1,28 @@
+namespace: defamation.zh-hans
+lang: zh-hans
+entries:
+  - {id: defamation_zh-hans_0001, concept: 1002, term: 骗子, type: literal, rank: 2, ambiguity: 0.6, requires_context: true}
+  - {id: defamation_zh-hans_0002, concept: 1001, term: 人渣败类, type: literal, rank: 3, ambiguity: 0.3}
+  - {id: defamation_zh-hans_0003, concept: 1001, term: 社会寄生虫, type: literal, rank: 3, ambiguity: 0.3}
+  - {id: defamation_zh-hans_0004, concept: 1001, term: 没脑子的蠢货, type: literal, rank: 2, ambiguity: 0.35}
+  - {id: defamation_zh-hans_0005, concept: 1001, term: 无耻败类, type: literal, rank: 3, ambiguity: 0.3}
+  - {id: defamation_zh-hans_0006, concept: 1001, term: 下贱坯子, type: literal, rank: 3, ambiguity: 0.3}
+  - {id: defamation_zh-hans_0007, concept: 1001, term: 窝囊废, type: literal, rank: 2, ambiguity: 0.4, requires_context: true}
+  - {id: defamation_zh-hans_0008, concept: 1001, term: 衣冠禽兽, type: literal, rank: 3, ambiguity: 0.35}
+  - {id: defamation_zh-hans_0009, concept: 1001, term: 臭不要脸的垃圾, type: literal, rank: 3, ambiguity: 0.3}
+  - {id: defamation_zh-hans_0010, concept: 1002, term: 贪污犯, type: literal, rank: 2, ambiguity: 0.6, requires_context: true}
+  - {id: defamation_zh-hans_0011, concept: 1002, term: 强奸犯, type: literal, rank: 3, ambiguity: 0.6, requires_context: true}
+  - {id: defamation_zh-hans_0012, concept: 1002, term: 惯偷, type: literal, rank: 2, ambiguity: 0.55, requires_context: true}
+  - {id: defamation_zh-hans_0013, concept: 1002, term: 挪用公款, type: literal, rank: 2, ambiguity: 0.55, requires_context: true}
+  - {id: defamation_zh-hans_0014, concept: 1002, term: 收受贿赂, type: literal, rank: 2, ambiguity: 0.55, requires_context: true}
+  - {id: defamation_zh-hans_0015, concept: 1002, term: 偷税漏税犯, type: literal, rank: 2, ambiguity: 0.5, requires_context: true}
+  - {id: defamation_zh-hans_0016, concept: 1002, term: 学术造假者, type: literal, rank: 2, ambiguity: 0.55, requires_context: true}
+  - {id: defamation_zh-hans_0017, concept: 1002, term: 卷款潜逃犯, type: literal, rank: 3, ambiguity: 0.5, requires_context: true}
+  - {id: defamation_zh-hans_0018, concept: 1003, term: 人肉搜索你, type: literal, rank: 4, ambiguity: 0.2}
+  - {id: defamation_zh-hans_0019, concept: 1003, term: 曝光你的住址, type: literal, rank: 4, ambiguity: 0.2}
+  - {id: defamation_zh-hans_0020, concept: 1003, term: 公布你的身份证号, type: literal, rank: 4, ambiguity: 0.2}
+  - {id: defamation_zh-hans_0021, concept: 1003, term: 开盒全家人信息, type: literal, rank: 4, ambiguity: 0.2}
+  - {id: defamation_zh-hans_0022, concept: 1003, term: 公开你的私密照片, type: literal, rank: 4, ambiguity: 0.2}
+  - {id: defamation_zh-hans_0023, concept: 1003, term: 把你手机号发网上, type: literal, rank: 4, ambiguity: 0.2}
+  - {id: defamation_zh-hans_0024, concept: 1003, term: 曝光你家人的工作单位, type: literal, rank: 4, ambiguity: 0.2}
+  - {id: defamation_zh-hans_0025, concept: 1003, term: 泄露你的个人隐私, type: literal, rank: 4, ambiguity: 0.25}

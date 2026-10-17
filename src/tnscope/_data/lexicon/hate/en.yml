@@ -1,0 +1,28 @@
+namespace: hate.en
+lang: en
+entries:
+  - {id: hate_en_0001, concept: 2005, term: go back to your country, type: phrase, rank: 4, ambiguity: 0.3, flags: [IGNORECASE]}
+  - {id: hate_en_0002, concept: 2001, term: subhuman race, type: phrase, rank: 5, ambiguity: 0.1, flags: [IGNORECASE]}
+  - {id: hate_en_0003, concept: 2001, term: racial vermin, type: phrase, rank: 5, ambiguity: 0.1, flags: [IGNORECASE]}
+  - {id: hate_en_0004, concept: 2001, term: filthy immigrants, type: phrase, rank: 5, ambiguity: 0.15, flags: [IGNORECASE]}
+  - {id: hate_en_0005, concept: 2001, term: wetback, type: literal, rank: 5, ambiguity: 0.1, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0006, concept: 2001, term: raghead, type: literal, rank: 5, ambiguity: 0.1, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0007, concept: 2002, term: gender traitor, type: phrase, rank: 4, ambiguity: 0.25, flags: [IGNORECASE]}
+  - {id: hate_en_0008, concept: 2002, term: degenerate queer, type: phrase, rank: 5, ambiguity: 0.1, flags: [IGNORECASE]}
+  - {id: hate_en_0009, concept: 2002, term: tranny freak, type: phrase, rank: 5, ambiguity: 0.1, flags: [IGNORECASE]}
+  - {id: hate_en_0010, concept: 2002, term: women are inferior beings, type: phrase, rank: 5, ambiguity: 0.15, flags: [IGNORECASE]}
+  - {id: hate_en_0011, concept: 2002, term: faggot, type: literal, rank: 5, ambiguity: 0.15, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0012, concept: 2003, term: religious vermin, type: phrase, rank: 5, ambiguity: 0.1, flags: [IGNORECASE]}
+  - {id: hate_en_0013, concept: 2003, term: islamofascist scum, type: phrase, rank: 5, ambiguity: 0.15, flags: [IGNORECASE]}
+  - {id: hate_en_0014, concept: 2003, term: christkiller, type: literal, rank: 5, ambiguity: 0.1, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0015, concept: 2003, term: burn down their mosques, type: phrase, rank: 5, ambiguity: 0.1, flags: [IGNORECASE]}
+  - {id: hate_en_0016, concept: 2003, term: burn down their synagogues, type: phrase, rank: 5, ambiguity: 0.1, flags: [IGNORECASE]}
+  - {id: hate_en_0017, concept: 2004, term: retarded freak, type: phrase, rank: 5, ambiguity: 0.15, flags: [IGNORECASE]}
+  - {id: hate_en_0018, concept: 2004, term: crippled parasite, type: phrase, rank: 5, ambiguity: 0.1, flags: [IGNORECASE]}
+  - {id: hate_en_0019, concept: 2004, term: disabled people should be euthanized, type: phrase, rank: 5, ambiguity: 0.1, flags: [IGNORECASE]}
+  - {id: hate_en_0020, concept: 2004, term: mongoloid idiot, type: phrase, rank: 5, ambiguity: 0.1, flags: [IGNORECASE]}
+  - {id: hate_en_0021, concept: 2004, term: spastic freak, type: phrase, rank: 5, ambiguity: 0.15, flags: [IGNORECASE]}
+  - {id: hate_en_0022, concept: 2005, term: deport all foreigners, type: phrase, rank: 4, ambiguity: 0.25, flags: [IGNORECASE]}
+  - {id: hate_en_0023, concept: 2005, term: ban all refugees, type: phrase, rank: 4, ambiguity: 0.3, flags: [IGNORECASE]}
+  - {id: hate_en_0024, concept: 2005, term: expel all immigrants, type: phrase, rank: 4, ambiguity: 0.25, flags: [IGNORECASE]}
+  - {id: hate_en_0025, concept: 2005, term: foreigners are not welcome here, type: phrase, rank: 4, ambiguity: 0.25, flags: [IGNORECASE]}

@@ -1,0 +1,7 @@
+lang: zh-hant
+rules:
+  - {id: zh_hant_news_report, type: news_report, terms: [據報導, 根據, 警方通報, 涉嫌犯罪被捕, 新聞報導], adjust: -15}
+  - {id: zh_hant_negation, type: negation, terms: [千萬不要, 不是, 請注意防範, 謹防受騙, 切勿相信, 防騙提醒], adjust: -20}
+  - {id: zh_hant_quotation, type: quotation, terms: [引用, 說道, 罵道, 舉例說, 這句話], adjust: -10}
+  - {id: zh_hant_target_person, type: target_person, terms: [你是, 你全家, 你這個, 像你這種, 去死吧], adjust: 15}
+  - {id: zh_hant_imperative, type: imperative, terms: [立即轉帳, 馬上聯繫, 立刻匯款, 趕緊加, 限時領取], adjust: 10}

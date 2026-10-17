@@ -1,0 +1,28 @@
+namespace: defamation.en
+lang: en
+entries:
+  - {id: defamation_en_0001, concept: 1002, term: fraudster, type: literal, rank: 2, ambiguity: 0.6, requires_context: true, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: defamation_en_0002, concept: 1001, term: worthless piece of trash, type: phrase, rank: 3, ambiguity: 0.3, flags: [IGNORECASE]}
+  - {id: defamation_en_0003, concept: 1001, term: pathetic loser, type: phrase, rank: 2, ambiguity: 0.4, flags: [IGNORECASE]}
+  - {id: defamation_en_0004, concept: 1001, term: disgusting scum, type: phrase, rank: 3, ambiguity: 0.3, flags: [IGNORECASE]}
+  - {id: defamation_en_0005, concept: 1001, term: brainless idiot, type: phrase, rank: 2, ambiguity: 0.4, flags: [IGNORECASE]}
+  - {id: defamation_en_0006, concept: 1001, term: waste of oxygen, type: phrase, rank: 3, ambiguity: 0.3, flags: [IGNORECASE]}
+  - {id: defamation_en_0007, concept: 1001, term: subhuman filth, type: phrase, rank: 3, ambiguity: 0.25, flags: [IGNORECASE]}
+  - {id: defamation_en_0008, concept: 1001, term: shameless parasite, type: phrase, rank: 2, ambiguity: 0.4, flags: [IGNORECASE]}
+  - {id: defamation_en_0009, concept: 1001, term: scumbag, type: literal, rank: 2, ambiguity: 0.45, requires_context: true, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: defamation_en_0010, concept: 1002, term: con artist, type: phrase, rank: 2, ambiguity: 0.6, requires_context: true, flags: [IGNORECASE]}
+  - {id: defamation_en_0011, concept: 1002, term: embezzler, type: literal, rank: 2, ambiguity: 0.6, requires_context: true, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: defamation_en_0012, concept: 1002, term: convicted felon, type: phrase, rank: 2, ambiguity: 0.65, requires_context: true, flags: [IGNORECASE]}
+  - {id: defamation_en_0013, concept: 1002, term: tax evader, type: phrase, rank: 2, ambiguity: 0.6, requires_context: true, flags: [IGNORECASE]}
+  - {id: defamation_en_0014, concept: 1002, term: sexual predator, type: phrase, rank: 3, ambiguity: 0.55, requires_context: true, flags: [IGNORECASE]}
+  - {id: defamation_en_0015, concept: 1002, term: stole company funds, type: phrase, rank: 3, ambiguity: 0.45, requires_context: true, flags: [IGNORECASE]}
+  - {id: defamation_en_0016, concept: 1002, term: takes bribes, type: phrase, rank: 2, ambiguity: 0.55, requires_context: true, flags: [IGNORECASE]}
+  - {id: defamation_en_0017, concept: 1002, term: pedophile, type: literal, rank: 3, ambiguity: 0.55, requires_context: true, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: defamation_en_0018, concept: 1003, term: leak your home address, type: phrase, rank: 4, ambiguity: 0.2, flags: [IGNORECASE]}
+  - {id: defamation_en_0019, concept: 1003, term: post your private photos, type: phrase, rank: 4, ambiguity: 0.2, flags: [IGNORECASE]}
+  - {id: defamation_en_0020, concept: 1003, term: expose your personal info, type: phrase, rank: 4, ambiguity: 0.25, flags: [IGNORECASE]}
+  - {id: defamation_en_0021, concept: 1003, term: publish your phone number, type: phrase, rank: 4, ambiguity: 0.25, flags: [IGNORECASE]}
+  - {id: defamation_en_0022, concept: 1003, term: dox your family, type: phrase, rank: 4, ambiguity: 0.2, flags: [IGNORECASE]}
+  - {id: defamation_en_0023, concept: 1003, term: reveal where you live, type: phrase, rank: 4, ambiguity: 0.3, flags: [IGNORECASE]}
+  - {id: defamation_en_0024, concept: 1003, term: leak your nudes, type: phrase, rank: 4, ambiguity: 0.15, flags: [IGNORECASE]}
+  - {id: defamation_en_0025, concept: 1003, term: post your workplace address, type: phrase, rank: 4, ambiguity: 0.25, flags: [IGNORECASE]}

@@ -1,0 +1,24 @@
+version: 1
+# lexicon_score = max over matched entries of rank_weight[rank-1] * (1 - ambiguity)
+rank_weight: [20, 40, 60, 80, 100]
+# corroboration = min((distinct matched entries of the same concept - 1) * step, cap)
+corroboration: {step: 10, cap: 20}
+fuse:
+  method: max          # max | weighted
+  weights: {stage1: 0.4, nlp: 0.3, llm: 0.3}
+# A matched entry with rank >= floor.rank keeps final_score >= floor.min_score.
+floor: {rank: 5, min_score: 60}
+thresholds:           # evaluated top to bottom, first match wins
+  - {min: 85, label: definite, action: block}
+  - {min: 60, label: probable, action: review}
+  - {min: 35, label: possible, action: flag}
+  - {min: 0, label: clean, action: pass}
+category_overrides:
+  illegal: {block_min: 70}
+  defamation: {block_min: 90}
+router:
+  definite_min: 85
+  clean_below: 20
+  nlp_confident_hi: 80
+  nlp_confident_lo: 20
+  ambiguous_min: 0.5   # ambiguity >= this makes a hit 'ambiguous' for routing

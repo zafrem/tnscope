@@ -1,0 +1,28 @@
+namespace: defamation.ko
+lang: ko
+entries:
+  - {id: defamation_ko_0001, concept: 1002, term: 사기꾼, type: literal, rank: 2, ambiguity: 0.6, requires_context: true}
+  - {id: defamation_ko_0002, concept: 1001, term: 인간 쓰레기, type: phrase, rank: 3, ambiguity: 0.3}
+  - {id: defamation_ko_0003, concept: 1001, term: 사회의 기생충, type: phrase, rank: 3, ambiguity: 0.3}
+  - {id: defamation_ko_0004, concept: 1001, term: 뇌가 없는 멍청이, type: phrase, rank: 2, ambiguity: 0.35}
+  - {id: defamation_ko_0005, concept: 1001, term: 구제불능 쓰레기, type: phrase, rank: 3, ambiguity: 0.3}
+  - {id: defamation_ko_0006, concept: 1001, term: 열등한 패배자, type: phrase, rank: 2, ambiguity: 0.4}
+  - {id: defamation_ko_0007, concept: 1001, term: 양심 없는 인간말종, type: phrase, rank: 3, ambiguity: 0.3}
+  - {id: defamation_ko_0008, concept: 1001, term: 인간말종, type: literal, rank: 3, ambiguity: 0.4, requires_context: true}
+  - {id: defamation_ko_0009, concept: 1001, term: 버러지 같은 인간, type: phrase, rank: 3, ambiguity: 0.3}
+  - {id: defamation_ko_0010, concept: 1002, term: 횡령범, type: literal, rank: 2, ambiguity: 0.6, requires_context: true}
+  - {id: defamation_ko_0011, concept: 1002, term: 성범죄자, type: literal, rank: 3, ambiguity: 0.6, requires_context: true}
+  - {id: defamation_ko_0012, concept: 1002, term: 상습 절도범, type: phrase, rank: 2, ambiguity: 0.55, requires_context: true}
+  - {id: defamation_ko_0013, concept: 1002, term: 전과자다, type: literal, rank: 2, ambiguity: 0.5, requires_context: true}
+  - {id: defamation_ko_0014, concept: 1002, term: 공금을 횡령했다, type: phrase, rank: 3, ambiguity: 0.45, requires_context: true}
+  - {id: defamation_ko_0015, concept: 1002, term: 뇌물을 받았다, type: phrase, rank: 2, ambiguity: 0.5, requires_context: true}
+  - {id: defamation_ko_0016, concept: 1002, term: 주가조작범, type: literal, rank: 2, ambiguity: 0.6, requires_context: true}
+  - {id: defamation_ko_0017, concept: 1002, term: 학력 위조범, type: phrase, rank: 2, ambiguity: 0.55, requires_context: true}
+  - {id: defamation_ko_0018, concept: 1003, term: 신상 털기, type: phrase, rank: 4, ambiguity: 0.25}
+  - {id: defamation_ko_0019, concept: 1003, term: 신상 공개한다, type: phrase, rank: 4, ambiguity: 0.2}
+  - {id: defamation_ko_0020, concept: 1003, term: 집주소 뿌린다, type: phrase, rank: 4, ambiguity: 0.2}
+  - {id: defamation_ko_0021, concept: 1003, term: 가족 신상 털어, type: phrase, rank: 4, ambiguity: 0.2}
+  - {id: defamation_ko_0022, concept: 1003, term: 개인정보 유출한다, type: phrase, rank: 4, ambiguity: 0.25}
+  - {id: defamation_ko_0023, concept: 1003, term: 전화번호 박제한다, type: phrase, rank: 4, ambiguity: 0.2}
+  - {id: defamation_ko_0024, concept: 1003, term: 사생활 사진 유포, type: phrase, rank: 4, ambiguity: 0.2}
+  - {id: defamation_ko_0025, concept: 1003, term: 직장 주소 공개한다, type: phrase, rank: 4, ambiguity: 0.25}

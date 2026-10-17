@@ -1,0 +1,7 @@
+lang: ko
+rules:
+  - {id: ko_news_report, type: news_report, terms: [보도, 에 따르면, 경찰에 따르면, 혐의로 구속, 뉴스에], adjust: -15}
+  - {id: ko_negation, type: negation, terms: [절대 하지, 아닙니다, 주의하세요, 조심하세요, 사기 주의, 속지 마세요, 예방], adjust: -20}
+  - {id: ko_quotation, type: quotation, terms: [라고 했다, 라는 말, 인용, 라며 욕설, 사례로], adjust: -10}
+  - {id: ko_target_person, type: target_person, terms: [너는, 니가, 네 가족, 너 같은, 죽어라], adjust: 15}
+  - {id: ko_imperative, type: imperative, terms: [지금 당장, 즉시 입금, 바로 연락, 빨리 보내, 서둘러], adjust: 10}

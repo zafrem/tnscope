@@ -1,0 +1,28 @@
+namespace: hate.zh-hans
+lang: zh-hans
+entries:
+  - {id: hate_zh-hans_0001, concept: 2005, term: 滚回你的国家, type: phrase, rank: 4, ambiguity: 0.3}
+  - {id: hate_zh-hans_0002, concept: 2001, term: 黑鬼滚出去, type: literal, rank: 5, ambiguity: 0.1}
+  - {id: hate_zh-hans_0003, concept: 2001, term: 小日本鬼子, type: literal, rank: 5, ambiguity: 0.2}
+  - {id: hate_zh-hans_0004, concept: 2001, term: 高丽棒子, type: literal, rank: 5, ambiguity: 0.15}
+  - {id: hate_zh-hans_0005, concept: 2001, term: 低劣民族, type: literal, rank: 5, ambiguity: 0.15}
+  - {id: hate_zh-hans_0006, concept: 2001, term: 洋垃圾滚蛋, type: literal, rank: 5, ambiguity: 0.15}
+  - {id: hate_zh-hans_0007, concept: 2002, term: 死基佬, type: literal, rank: 5, ambiguity: 0.15}
+  - {id: hate_zh-hans_0008, concept: 2002, term: 死人妖, type: literal, rank: 5, ambiguity: 0.15}
+  - {id: hate_zh-hans_0009, concept: 2002, term: 女人就是低等生物, type: literal, rank: 5, ambiguity: 0.1}
+  - {id: hate_zh-hans_0010, concept: 2002, term: 同性恋都是变态, type: literal, rank: 5, ambiguity: 0.1}
+  - {id: hate_zh-hans_0011, concept: 2002, term: 母狗赔钱货, type: literal, rank: 5, ambiguity: 0.15}
+  - {id: hate_zh-hans_0012, concept: 2003, term: 绿教恐怖分子, type: literal, rank: 5, ambiguity: 0.15}
+  - {id: hate_zh-hans_0013, concept: 2003, term: 邪教徒去死, type: literal, rank: 5, ambiguity: 0.15}
+  - {id: hate_zh-hans_0014, concept: 2003, term: 神棍异端分子, type: literal, rank: 5, ambiguity: 0.2}
+  - {id: hate_zh-hans_0015, concept: 2003, term: 烧毁清真寺, type: literal, rank: 5, ambiguity: 0.1}
+  - {id: hate_zh-hans_0016, concept: 2003, term: 宗教寄生虫, type: literal, rank: 5, ambiguity: 0.15}
+  - {id: hate_zh-hans_0017, concept: 2004, term: 死残废, type: literal, rank: 5, ambiguity: 0.15}
+  - {id: hate_zh-hans_0018, concept: 2004, term: 弱智脑残儿, type: literal, rank: 5, ambiguity: 0.15}
+  - {id: hate_zh-hans_0019, concept: 2004, term: 残疾人是社会累赘, type: literal, rank: 5, ambiguity: 0.1}
+  - {id: hate_zh-hans_0020, concept: 2004, term: 死瞎子死聋子, type: literal, rank: 5, ambiguity: 0.15}
+  - {id: hate_zh-hans_0021, concept: 2004, term: 智障废物不配活着, type: literal, rank: 5, ambiguity: 0.1}
+  - {id: hate_zh-hans_0022, concept: 2005, term: 外地人滚出本地, type: literal, rank: 4, ambiguity: 0.2}
+  - {id: hate_zh-hans_0023, concept: 2005, term: 把外国人全部驱逐出境, type: literal, rank: 4, ambiguity: 0.25}
+  - {id: hate_zh-hans_0024, concept: 2005, term: 乡下人滚回农村, type: literal, rank: 4, ambiguity: 0.2}
+  - {id: hate_zh-hans_0025, concept: 2005, term: 禁止外地人入内, type: literal, rank: 4, ambiguity: 0.25}

@@ -1,0 +1,28 @@
+namespace: defamation.zh-hant
+lang: zh-hant
+entries:
+  - {id: defamation_zh-hant_0001, concept: 1002, term: 騙子, type: literal, rank: 2, ambiguity: 0.6, requires_context: true}
+  - {id: defamation_zh-hant_0002, concept: 1001, term: 人渣敗類, type: literal, rank: 3, ambiguity: 0.3}
+  - {id: defamation_zh-hant_0003, concept: 1001, term: 社會寄生蟲, type: literal, rank: 3, ambiguity: 0.3}
+  - {id: defamation_zh-hant_0004, concept: 1001, term: 沒腦子的蠢貨, type: literal, rank: 2, ambiguity: 0.35}
+  - {id: defamation_zh-hant_0005, concept: 1001, term: 無恥敗類, type: literal, rank: 3, ambiguity: 0.3}
+  - {id: defamation_zh-hant_0006, concept: 1001, term: 下賤坯子, type: literal, rank: 3, ambiguity: 0.3}
+  - {id: defamation_zh-hant_0007, concept: 1001, term: 窩囊廢, type: literal, rank: 2, ambiguity: 0.4, requires_context: true}
+  - {id: defamation_zh-hant_0008, concept: 1001, term: 衣冠禽獸, type: literal, rank: 3, ambiguity: 0.35}
+  - {id: defamation_zh-hant_0009, concept: 1001, term: 臭不要臉的垃圾, type: literal, rank: 3, ambiguity: 0.3}
+  - {id: defamation_zh-hant_0010, concept: 1002, term: 貪污犯, type: literal, rank: 2, ambiguity: 0.6, requires_context: true}
+  - {id: defamation_zh-hant_0011, concept: 1002, term: 強姦犯, type: literal, rank: 3, ambiguity: 0.6, requires_context: true}
+  - {id: defamation_zh-hant_0012, concept: 1002, term: 慣偷, type: literal, rank: 2, ambiguity: 0.55, requires_context: true}
+  - {id: defamation_zh-hant_0013, concept: 1002, term: 挪用公款, type: literal, rank: 2, ambiguity: 0.55, requires_context: true}
+  - {id: defamation_zh-hant_0014, concept: 1002, term: 收受賄賂, type: literal, rank: 2, ambiguity: 0.55, requires_context: true}
+  - {id: defamation_zh-hant_0015, concept: 1002, term: 逃漏稅犯, type: literal, rank: 2, ambiguity: 0.5, requires_context: true}
+  - {id: defamation_zh-hant_0016, concept: 1002, term: 學術造假者, type: literal, rank: 2, ambiguity: 0.55, requires_context: true}
+  - {id: defamation_zh-hant_0017, concept: 1002, term: 捲款潛逃犯, type: literal, rank: 3, ambiguity: 0.5, requires_context: true}
+  - {id: defamation_zh-hant_0018, concept: 1003, term: 人肉搜索你, type: literal, rank: 4, ambiguity: 0.2}
+  - {id: defamation_zh-hant_0019, concept: 1003, term: 曝光你的住址, type: literal, rank: 4, ambiguity: 0.2}
+  - {id: defamation_zh-hant_0020, concept: 1003, term: 公布你的身分證號, type: literal, rank: 4, ambiguity: 0.2}
+  - {id: defamation_zh-hant_0021, concept: 1003, term: 開盒全家人資訊, type: literal, rank: 4, ambiguity: 0.2}
+  - {id: defamation_zh-hant_0022, concept: 1003, term: 公開你的私密照片, type: literal, rank: 4, ambiguity: 0.2}
+  - {id: defamation_zh-hant_0023, concept: 1003, term: 把你手機號發網上, type: literal, rank: 4, ambiguity: 0.2}
+  - {id: defamation_zh-hant_0024, concept: 1003, term: 曝光你家人的工作單位, type: literal, rank: 4, ambiguity: 0.2}
+  - {id: defamation_zh-hant_0025, concept: 1003, term: 洩露你的個人隱私, type: literal, rank: 4, ambiguity: 0.25}

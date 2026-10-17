@@ -1,0 +1,28 @@
+namespace: defamation.ja
+lang: ja
+entries:
+  - {id: defamation_ja_0001, concept: 1002, term: 詐欺師, type: literal, rank: 2, ambiguity: 0.6, requires_context: true}
+  - {id: defamation_ja_0002, concept: 1001, term: 人間のクズ, type: literal, rank: 3, ambiguity: 0.3}
+  - {id: defamation_ja_0003, concept: 1001, term: 社会のゴミ, type: literal, rank: 3, ambiguity: 0.3}
+  - {id: defamation_ja_0004, concept: 1001, term: 脳なし, type: literal, rank: 2, ambiguity: 0.4}
+  - {id: defamation_ja_0005, concept: 1001, term: 役立たずのクズ, type: literal, rank: 3, ambiguity: 0.3}
+  - {id: defamation_ja_0006, concept: 1001, term: 恥知らずの寄生虫, type: literal, rank: 3, ambiguity: 0.3}
+  - {id: defamation_ja_0007, concept: 1001, term: 生きる価値がない, type: literal, rank: 3, ambiguity: 0.3}
+  - {id: defamation_ja_0008, concept: 1001, term: 粗大ゴミ人間, type: literal, rank: 3, ambiguity: 0.3}
+  - {id: defamation_ja_0009, concept: 1001, term: 低能な負け犬, type: literal, rank: 2, ambiguity: 0.35}
+  - {id: defamation_ja_0010, concept: 1002, term: 横領犯, type: literal, rank: 2, ambiguity: 0.6, requires_context: true}
+  - {id: defamation_ja_0011, concept: 1002, term: 性犯罪者, type: literal, rank: 3, ambiguity: 0.6, requires_context: true}
+  - {id: defamation_ja_0012, concept: 1002, term: 前科者だ, type: literal, rank: 2, ambiguity: 0.5, requires_context: true}
+  - {id: defamation_ja_0013, concept: 1002, term: 脱税犯, type: literal, rank: 2, ambiguity: 0.6, requires_context: true}
+  - {id: defamation_ja_0014, concept: 1002, term: 会社の金を横領した, type: literal, rank: 3, ambiguity: 0.45, requires_context: true}
+  - {id: defamation_ja_0015, concept: 1002, term: 賄賂を受け取った, type: literal, rank: 2, ambiguity: 0.5, requires_context: true}
+  - {id: defamation_ja_0016, concept: 1002, term: 泥棒だ, type: literal, rank: 2, ambiguity: 0.55, requires_context: true}
+  - {id: defamation_ja_0017, concept: 1002, term: 学歴詐称者, type: literal, rank: 2, ambiguity: 0.55, requires_context: true}
+  - {id: defamation_ja_0018, concept: 1003, term: 住所を晒す, type: literal, rank: 4, ambiguity: 0.2}
+  - {id: defamation_ja_0019, concept: 1003, term: 個人情報を晒す, type: literal, rank: 4, ambiguity: 0.2}
+  - {id: defamation_ja_0020, concept: 1003, term: 本名を特定して晒す, type: literal, rank: 4, ambiguity: 0.2}
+  - {id: defamation_ja_0021, concept: 1003, term: 電話番号をネットに晒す, type: literal, rank: 4, ambiguity: 0.2}
+  - {id: defamation_ja_0022, concept: 1003, term: 家族の職場を晒す, type: literal, rank: 4, ambiguity: 0.2}
+  - {id: defamation_ja_0023, concept: 1003, term: プライベート写真を拡散する, type: literal, rank: 4, ambiguity: 0.2}
+  - {id: defamation_ja_0024, concept: 1003, term: 自宅を特定した, type: literal, rank: 4, ambiguity: 0.3}
+  - {id: defamation_ja_0025, concept: 1003, term: 身元をネットに公開する, type: literal, rank: 4, ambiguity: 0.25}

@@ -1,0 +1,28 @@
+namespace: hate.ko
+lang: ko
+entries:
+  - {id: hate_ko_0001, concept: 2005, term: 너희 나라로 돌아가, type: phrase, rank: 4, ambiguity: 0.3}
+  - {id: hate_ko_0002, concept: 2001, term: 짱깨, type: literal, rank: 5, ambiguity: 0.15}
+  - {id: hate_ko_0003, concept: 2001, term: 쪽바리, type: literal, rank: 5, ambiguity: 0.15}
+  - {id: hate_ko_0004, concept: 2001, term: 조선족 바퀴벌레, type: phrase, rank: 5, ambiguity: 0.1}
+  - {id: hate_ko_0005, concept: 2001, term: 깜둥이, type: literal, rank: 5, ambiguity: 0.15}
+  - {id: hate_ko_0006, concept: 2001, term: 미개한 외국인, type: phrase, rank: 5, ambiguity: 0.2}
+  - {id: hate_ko_0007, concept: 2002, term: 한남충, type: literal, rank: 5, ambiguity: 0.15}
+  - {id: hate_ko_0008, concept: 2002, term: 김치녀, type: literal, rank: 5, ambiguity: 0.2}
+  - {id: hate_ko_0009, concept: 2002, term: 맘충, type: literal, rank: 5, ambiguity: 0.2}
+  - {id: hate_ko_0010, concept: 2002, term: 동성애자는 정신병자, type: phrase, rank: 5, ambiguity: 0.15}
+  - {id: hate_ko_0011, concept: 2002, term: 여자는 열등한 존재, type: phrase, rank: 5, ambiguity: 0.15}
+  - {id: hate_ko_0012, concept: 2003, term: 개독교, type: literal, rank: 5, ambiguity: 0.2}
+  - {id: hate_ko_0013, concept: 2003, term: 이슬람 벌레, type: phrase, rank: 5, ambiguity: 0.1}
+  - {id: hate_ko_0014, concept: 2003, term: 땡중, type: literal, rank: 4, ambiguity: 0.35}
+  - {id: hate_ko_0015, concept: 2003, term: 광신도 집단 박멸, type: phrase, rank: 5, ambiguity: 0.15}
+  - {id: hate_ko_0016, concept: 2003, term: 사원을 불태워야, type: phrase, rank: 5, ambiguity: 0.15}
+  - {id: hate_ko_0017, concept: 2004, term: 애자새끼, type: literal, rank: 5, ambiguity: 0.1}
+  - {id: hate_ko_0018, concept: 2004, term: 장애인은 사회의 짐, type: phrase, rank: 5, ambiguity: 0.1}
+  - {id: hate_ko_0019, concept: 2004, term: 불구자 새끼, type: phrase, rank: 5, ambiguity: 0.1}
+  - {id: hate_ko_0020, concept: 2004, term: 정신지체아 새끼, type: phrase, rank: 5, ambiguity: 0.1}
+  - {id: hate_ko_0021, concept: 2004, term: 장애인 격리해야, type: phrase, rank: 5, ambiguity: 0.15}
+  - {id: hate_ko_0022, concept: 2005, term: 외국인 다 추방해라, type: phrase, rank: 4, ambiguity: 0.2}
+  - {id: hate_ko_0023, concept: 2005, term: 난민 수용 절대 반대, type: phrase, rank: 3, ambiguity: 0.5, requires_context: true}
+  - {id: hate_ko_0024, concept: 2005, term: 불법체류자 전부 내쫓아라, type: phrase, rank: 4, ambiguity: 0.25}
+  - {id: hate_ko_0025, concept: 2005, term: 이민자 출입 금지시켜라, type: phrase, rank: 4, ambiguity: 0.25}

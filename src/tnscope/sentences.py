@@ -2,7 +2,7 @@
 
 import re
 
-_BOUNDARY = re.compile(r"[.!?]+(?=\s|\Z)|[。！？]+|\n")
+_BOUNDARY = re.compile(r"[.!?]+[\"'\u201d\u2019)\]]*(?=\s|\Z)|[。！？]+|\n")
 
 
 def split_sentences(text: str) -> list[tuple[int, int]]:

@@ -46,3 +46,15 @@ def test_repeated_terminators():
 def test_trims_whitespace():
     s = "  a.  b  "
     assert texts(s) == ["a.", "b"]
+
+
+def test_closing_quote_after_terminator():
+    assert texts('He said "you are a wetback." Never mind.') == [
+        'He said "you are a wetback."',
+        "Never mind.",
+    ]
+
+
+def test_closing_brackets_after_terminator():
+    assert texts("(Really.) Yes!) ok") == ["(Really.)", "Yes!)", "ok"]
+    assert texts("It\u2019s \u201cfine.\u201d Next") == ["It\u2019s \u201cfine.\u201d", "Next"]

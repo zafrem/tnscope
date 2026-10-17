@@ -69,7 +69,7 @@ def load_data(data_dir: Path | None = None) -> Data:
                         ambiguity=float(e.get("ambiguity", 0.0)),
                         requires_context=bool(e.get("requires_context", False)),
                         flags=tuple(e.get("flags") or ()),
-                        hit_keywords=tuple(e.get("hit_keywords") or ()),
+                        hit_keywords=tuple(k for k in (e.get("hit_keywords") or ()) if k),
                         always_run=bool(e.get("always_run", False)),
                         category=category,
                     )

@@ -118,3 +118,21 @@ def test_slice_for_uses_ranges():
     assert n.slice_for(0, 2) == "ab"
     assert n.slice_for(2, 5) == "cd"
     assert n.slice_for(2, 3) == ""
+
+
+def test_strip_keeps_origins():
+    n = normalize("a​b​​c", [{"type": "strip", "chars": ["​"]}])
+    assert n.text == "abc"
+    assert n.origin == [0, 2, 5] and n.origin_end == [1, 3, 6]
+
+
+def test_collapse_runs_across_any_char():
+    n = normalize("x\n\n\n!!!!", [{"type": "collapse_repeats", "max_run": 1}])
+    assert n.text == "x\n!"
+    assert n.origin == [0, 1, 4]
+
+
+def test_collapse_rejects_non_positive_max_run():
+    with pytest.raises(ValueError) as e:
+        normalize("secret", [{"id": "c0", "type": "collapse_repeats", "max_run": 0}])
+    assert "c0" in str(e.value) and "secret" not in str(e.value)

@@ -63,15 +63,16 @@ def _seg_start(chars: list[str], j: int) -> bool:
     return c < "\x80" or _starts_segment(chars[j - 1], c)
 
 
-_BLOCK = 256
+_LEAF = 16
 
 
 def _nfkc(chars: list[str], origin: list[int], origin_end: list[int]):
     """NFKC over composition segments; each output char maps to its segment's range.
 
     A segment is a starter plus everything NFKC may combine with it (combining
-    marks, half-width voiced sound marks, Hangul V/T jamo, ...). Blocks of
-    segments that are already NFKC-stable are copied unchanged.
+    marks, half-width voiced sound marks, Hangul V/T jamo, ...). Ranges that
+    are already NFKC-stable are copied unchanged; others are bisected at
+    segment boundaries down to small leaves that are normalized per segment.
     """
     n = len(chars)
     text = "".join(chars)
@@ -80,17 +81,8 @@ def _nfkc(chars: list[str], origin: list[int], origin_end: list[int]):
     nc: list[str] = []
     no: list[int] = []
     ne: list[int] = []
-    a = 0
-    while a < n:
-        b = min(a + _BLOCK, n)
-        while b < n and not _seg_start(chars, b):
-            b += 1
-        if unicodedata.is_normalized("NFKC", text[a:b]):
-            nc.extend(chars[a:b])
-            no.extend(origin[a:b])
-            ne.extend(origin_end[a:b])
-            a = b
-            continue
+
+    def per_segment(a: int, b: int) -> None:
         i = a
         while i < b:
             j = i + 1
@@ -102,15 +94,56 @@ def _nfkc(chars: list[str], origin: list[int], origin_end: list[int]):
             no.extend([start] * len(out))
             ne.extend([end] * len(out))
             i = j
-        a = b
+
+    # Explicit stack of [a, b) ranges whose ends are segment boundaries,
+    # processed left to right.
+    stack = [(0, n)]
+    while stack:
+        a, b = stack.pop()
+        if unicodedata.is_normalized("NFKC", text[a:b]):
+            nc.extend(chars[a:b])
+            no.extend(origin[a:b])
+            ne.extend(origin_end[a:b])
+            continue
+        if b - a > _LEAF:
+            m = (a + b) // 2
+            while m < b and not _seg_start(chars, m):
+                m += 1
+            if m < b:
+                stack.append((m, b))
+                stack.append((a, m))
+                continue
+        per_segment(a, b)
+    return nc, no, ne
+
+
+def _drop(chars, origin, origin_end, ranges):
+    """Remove the sorted, disjoint [start, end) index ranges from all three lists."""
+    if not ranges:
+        return chars, origin, origin_end
+    nc: list[str] = []
+    no: list[int] = []
+    ne: list[int] = []
+    pos = 0
+    for start, end in ranges:
+        nc.extend(chars[pos:start])
+        no.extend(origin[pos:start])
+        ne.extend(origin_end[pos:start])
+        pos = end
+    nc.extend(chars[pos:])
+    no.extend(origin[pos:])
+    ne.extend(origin_end[pos:])
     return nc, no, ne
 
 
 def _apply(chars: list[str], origin: list[int], origin_end: list[int], rule: dict):
     kind = rule.get("type")
     if kind == "strip":
-        drop = set(rule["chars"])
-        keep = [i for i, c in enumerate(chars) if c not in drop]
+        drop = "".join(re.escape(x) for x in rule["chars"])
+        if not drop:
+            return chars, origin, origin_end
+        pat = re.compile(f"[{drop}]+")
+        ranges = [m.span() for m in pat.finditer("".join(chars))]
     elif kind == "map":
         mapping = rule["mapping"]
         if any(len(k) != 1 or len(v) != 1 for k, v in mapping.items()):
@@ -124,26 +157,16 @@ def _apply(chars: list[str], origin: list[int], origin_end: list[int], rule: dic
         b = _class_body(rule["between"])
         c = "".join(re.escape(x) for x in rule["chars"])
         pat = re.compile(f"(?<=[{b}])[{c}]+(?=[{b}])")
-        s = "".join(chars)
-        drop_idx: set[int] = set()
-        for m in pat.finditer(s):
-            drop_idx.update(range(m.start(), m.end()))
-        keep = [i for i in range(len(chars)) if i not in drop_idx]
+        ranges = [m.span() for m in pat.finditer("".join(chars))]
     elif kind == "collapse_repeats":
-        max_run = rule["max_run"]
-        keep = []
-        run = 0
-        for i, c in enumerate(chars):
-            run = run + 1 if i and chars[i - 1] == c else 1
-            if run <= max_run:
-                keep.append(i)
+        max_run = int(rule["max_run"])
+        if max_run < 1:
+            raise ValueError(f"collapse_repeats rule {rule.get('id', '<no id>')!r}: max_run must be >= 1")
+        pat = re.compile(f"(.)\\1{{{max_run},}}", re.DOTALL)
+        ranges = [(m.start() + max_run, m.end()) for m in pat.finditer("".join(chars))]
     else:
         raise ValueError(f"unknown normalize rule type: {kind!r}")
-    return (
-        [chars[i] for i in keep],
-        [origin[i] for i in keep],
-        [origin_end[i] for i in keep],
-    )
+    return _drop(chars, origin, origin_end, ranges)
 
 
 def normalize(text: str, rules: list[dict]) -> Normalized:

@@ -1,6 +1,7 @@
 """Engine: ties normalize, match, sentences, scoring and masking together."""
 from __future__ import annotations
 
+from bisect import bisect_right
 from pathlib import Path
 
 from tnscope.data import load_data
@@ -8,7 +9,7 @@ from tnscope.mask import mask_text
 from tnscope.match import Matcher
 from tnscope.models import Detection, ScanResult, SentenceResult, Thresholds
 from tnscope.normalize import normalize
-from tnscope.score import score_concept
+from tnscope.score import context_adjust, prepare_context, score_concept
 from tnscope.sentences import split_sentences
 
 
@@ -17,6 +18,10 @@ class Engine:
         self.data = load_data(data_dir)
         self._matchers = {
             lang: Matcher(self.data.lexicon.get(lang, [])) for lang in self.data.languages
+        }
+        self._context = {
+            lang: prepare_context(self.data.context_rules.get(lang, []))
+            for lang in self.data.languages
         }
 
     def scan(
@@ -42,23 +47,32 @@ class Engine:
         sentences = split_sentences(text)
 
         per_sentence: list[list[tuple]] = [[] for _ in sentences]
+        starts = [s for s, _ in sentences]
+        last = len(sentences) - 1
         for m in matches:
             o_start, o_end = norm.to_original_span(m.start, m.end)
-            for i, (s, e) in enumerate(sentences):
-                if s <= o_start < e:
-                    per_sentence[i].append((m, (o_start, o_end)))
-                    break
+            # Sentence containing o_start; a start in a gap between sentences goes
+            # to the next sentence (or the last one if none follows). Never dropped.
+            i = bisect_right(starts, o_start) - 1
+            if i < 0:
+                i = 0
+            elif o_start >= sentences[i][1] and i < last:
+                i += 1
+            per_sentence[i].append((m, (o_start, o_end)))
 
         context_rules = self.data.context_rules.get(lang, [])
+        prepared = self._context[lang]
         results: list[SentenceResult] = []
         mask_spans: list[tuple[int, int]] = []
         for (s, e), items in zip(sentences, per_sentence):
-            sent_norm = norm.slice_for(s, e)
             groups: dict[int, list] = {}
             for m, _ in items:
                 groups.setdefault(m.entry.concept, []).append(m)
+            if groups:
+                sent_norm = norm.slice_for(s, e)
+                adjust = context_adjust(sent_norm, prepared)
             scores = {
-                c: score_concept(ms, sent_norm, context_rules, self.data.scoring)
+                c: score_concept(ms, sent_norm, context_rules, self.data.scoring, adjust=adjust)
                 for c, ms in groups.items()
             }
             ids = {c: sorted({m.entry.id for m in ms}) for c, ms in groups.items()}

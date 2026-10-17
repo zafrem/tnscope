@@ -96,3 +96,69 @@ def test_each_language_smoke():
         term = hate[0].term
         r = eng.scan(term, lang)
         assert sum(len(s.detections) for s in r.sentences) >= 1, (lang, term)
+
+
+def test_halfwidth_dakuten_end_to_end():
+    src = "在日ｺﾞｷﾌﾞﾘ"
+    r = scan(src, "ja")
+    dets = [d for s in r.sentences for d in s.detections]
+    assert dets and dets[0].span == (0, len(src))
+    assert r.masked_text == "*" * len(src)
+    assert len(r.masked_text) == len(src)
+
+
+def test_nfd_japanese_end_to_end():
+    import unicodedata
+
+    src = "あれは" + unicodedata.normalize("NFD", "在日ゴキブリ") + "だ"
+    r = scan(src, "ja")
+    dets = [d for s in r.sentences for d in s.detections]
+    assert dets
+    assert len(r.masked_text) == len(src)
+    a, b = dets[0].span
+    assert r.masked_text[a:b] == "*" * (b - a)
+    assert src[:a] == "あれは" and src[b:] == "だ"
+
+
+def test_match_starting_in_sentence_gap_not_dropped(custom_data):
+    root = custom_data("hate", "en", [{
+        "id": "hate_en_9001", "concept": 2001, "term": "\\s+slurx", "type": "regex",
+        "rank": 5, "ambiguity": 0.0, "always_run": True,
+    }])
+    r = Engine(data_dir=root).scan("Hello.\n slurx here", "en")
+    dets = [d for s in r.sentences for d in s.detections]
+    assert len(dets) == 1
+    assert "slurx" not in r.masked_text
+
+
+def test_long_input_is_linear():
+    import time
+
+    base = (
+        "The weather was mild and the market opened early today. "
+        "Children walked to school while shop owners swept the pavement! "
+        "Did anyone notice the new bakery near the station? "
+    )
+    hit = "Go back, wetback. "
+    small = base * 3 + hit + base
+    big_parts = []
+    while sum(len(p) for p in big_parts) < 1_000_000:
+        big_parts.append(small)
+    big = "".join(big_parts)
+    eng = Engine()
+    small_r = eng.scan(small, "en")
+    t0 = time.perf_counter()
+    big_r = eng.scan(big, "en")
+    elapsed = time.perf_counter() - t0
+    assert elapsed < 10, elapsed
+    reps = len(big_parts)
+    assert len(big_r.sentences) == reps * len(small_r.sentences)
+    assert big_r.masked_text == small_r.masked_text * reps
+    n = len(small)
+    for i, s in enumerate(big_r.sentences):
+        ref = small_r.sentences[i % len(small_r.sentences)]
+        off = (i // len(small_r.sentences)) * n
+        assert s.span == (ref.span[0] + off, ref.span[1] + off)
+        assert [(d.span[0] - off, d.span[1] - off, d.score, d.action) for d in s.detections] == [
+            (*d.span, d.score, d.action) for d in ref.detections
+        ]

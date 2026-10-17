@@ -16,13 +16,25 @@ class Match:
     end: int
 
 
+class _FoldTable(dict):
+    """str.translate table: code point -> per-character lower(), filled lazily."""
+
+    def __missing__(self, cp: int) -> str:
+        ch = chr(cp)
+        lo = ch.lower()
+        val = lo if len(lo) == 1 else ch
+        self[cp] = val
+        return val
+
+
+_FOLD_TABLE = _FoldTable()
+
+
 def fold(s: str) -> str:
     """Per-character lower(), keeping the original char if its length would change."""
-    out = []
-    for ch in s:
-        lo = ch.lower()
-        out.append(lo if len(lo) == 1 else ch)
-    return "".join(out)
+    if s.isascii():
+        return s.lower()
+    return s.translate(_FOLD_TABLE)
 
 
 def _is_alnum_ascii(ch: str) -> bool:

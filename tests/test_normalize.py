@@ -71,8 +71,50 @@ def test_nfkc_expansion_shares_origin():
     n = normalize("x\ufb01", rules)
     assert n.text == "xfi"
     assert n.origin == [0, 1, 1]
+    assert n.origin_end == [1, 2, 2]
+    assert n.to_original_span(2, 3) == (1, 2)
 
 
 def test_strip_between_edges_not_stripped():
     rule = {"type": "strip_between", "chars": ["."], "between": "a-z"}
     assert normalize(".a.b.", [rule]).text == ".ab."
+
+
+_NFKC = [{"type": "nfkc"}]
+
+
+def test_nfkc_halfwidth_dakuten_composes():
+    n = normalize("\uff7a\uff9e", _NFKC)  # half-width ko + voiced mark
+    assert n.text == "\u30b4"  # ゴ
+    assert n.to_original_span(0, 1) == (0, 2)
+
+
+def test_nfkc_halfwidth_term_maps_whole_range():
+    src = "在日ｺﾞｷﾌﾞﾘ"
+    n = normalize(src, _NFKC)
+    assert n.text == "在日ゴキブリ"
+    assert n.to_original_span(0, len(n.text)) == (0, len(src))
+    assert n.slice_for(0, len(src)) == "在日ゴキブリ"
+
+
+def test_nfkc_nfd_input_composes():
+    import unicodedata
+
+    src = unicodedata.normalize("NFD", "在日ゴキブリ")
+    assert len(src) > 6
+    n = normalize(src, _NFKC)
+    assert n.text == "在日ゴキブリ"
+    assert n.to_original_span(0, len(n.text)) == (0, len(src))
+
+
+def test_nfkc_combining_mark_stays_with_base():
+    n = normalize("e\u0301x", _NFKC)
+    assert n.text == "\u00e9x"
+    assert n.origin == [0, 2] and n.origin_end == [2, 3]
+
+
+def test_slice_for_uses_ranges():
+    n = normalize("ab.cd", [{"type": "strip", "chars": ["."]}])
+    assert n.slice_for(0, 2) == "ab"
+    assert n.slice_for(2, 5) == "cd"
+    assert n.slice_for(2, 3) == ""

@@ -71,6 +71,34 @@ Options: `--lang` (required), `--file`, `--json`, `--mask-min`, `--mask-char`,
 or stdin (UTF-8). Numeric options must be finite numbers, and the thresholds
 must satisfy `flag <= review <= block`; otherwise the exit code is 2.
 
+## Streaming
+
+`Engine.scan` needs the whole text. For text that arrives in pieces (chat transports, a model's output, a log
+tail) use a `StreamScanner`:
+
+```python
+sc = engine.stream("en")                 # same keyword options as scan(), plus overlap / max_pending
+for chunk in chunks:
+    update = sc.feed(chunk)              # sentences that became final, possibly none
+    send(update.text)                    # masked text, ready to forward
+    for d in update.detections:          # spans are offsets in the whole stream
+        ...
+update = sc.finish()                     # the stream ended: settle what is pending
+```
+
+The result is the same as scanning the whole text in one call: the `update.text` pieces concatenated equal
+`scan(text).masked_text`, and detections have the same scores and actions (a test checks this for chunk sizes
+from 1 character up). Only the sentence still being written is held back (`sc.pending`), so output lags by
+up to one sentence. Each sentence is scanned once, so a stage 2 add-on or a stage 3 judge runs once per
+sentence, not once per chunk.
+
+A sentence with no boundary (a log line, text without punctuation) is settled anyway once more than
+`max_pending` characters (default 4096) are waiting, at a word boundary, never inside a lexicon match, and
+leaving `overlap` characters (default 128) pending. `update.forced` is then `True`; the cut sentence is scored with
+less context. A scanner is not thread-safe (one per stream, the engine can be shared). Chunks are `str`.
+Cost: about 1.3 times a single full scan at 256-character chunks, roughly 60 microseconds per call for single
+characters.
+
 ## Thresholds and actions
 
 Scores are 0-100. Default thresholds (read from the data's `scoring.yml`):

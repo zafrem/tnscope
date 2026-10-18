@@ -9,6 +9,7 @@ from tnscope.stages import (
     Stage2Scorer,
     Stage3Scorer,
 )
+from tnscope.stream import StreamScanner, StreamUpdate
 from tnscope.models import Detection, ScanResult, SentenceResult, Thresholds
 
 __version__ = "0.1.0"
@@ -16,6 +17,8 @@ __version__ = "0.1.0"
 __all__ = [
     "scan",
     "Engine",
+    "StreamScanner",
+    "StreamUpdate",
     "Thresholds",
     "ScanResult",
     "SentenceResult",

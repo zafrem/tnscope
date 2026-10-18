@@ -39,6 +39,15 @@ class Engine:
             for lang in self.data.languages
         }
 
+    def stream(self, lang: str, **kwargs):
+        """A :class:`tnscope.stream.StreamScanner` for text that arrives in chunks.
+
+        Keyword arguments are those of :meth:`scan` plus ``overlap`` and ``max_pending``.
+        """
+        from tnscope.stream import StreamScanner
+
+        return StreamScanner(self, lang, **kwargs)
+
     def scan(
         self,
         text: str,

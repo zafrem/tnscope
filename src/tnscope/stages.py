@@ -19,6 +19,8 @@ API_VERSION = 1
 STAGE2_GROUP = "tnscope.stage2"
 STAGE3_GROUP = "tnscope.stage3"
 ANY_LANG = "*"
+# NlpSignals.intent values that mean "the term is not being used abusively".
+NON_ABUSIVE_INTENTS = frozenset({"report", "media", "discussion"})
 
 
 class SpanRef(BaseModel):
@@ -47,6 +49,12 @@ class NlpResult(BaseModel):
 
     score: float = Field(ge=0, le=100)
     signals: NlpSignals
+
+    @property
+    def non_abusive_frame(self) -> bool:
+        """True when the signals say the term is quoted, negated, reported or discussed."""
+        s = self.signals
+        return bool(s.quotation or s.negation or s.intent in NON_ABUSIVE_INTENTS)
 
 
 class LlmRequest(BaseModel):

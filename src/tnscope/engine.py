@@ -48,6 +48,7 @@ class Engine:
         mask_min_score: float | None = None,
         mask_char: str = "*",
         max_stage: int = 2,
+        verify_definite: bool = False,
     ) -> ScanResult:
         """Scan ``text`` (language ``lang``).
 
@@ -60,6 +61,10 @@ class Engine:
         allow the LLM judge (opt-in; it may send text to a model). A failing
         add-on never raises: the previous stage's score stands and a code is
         appended to ``ScanResult.warnings``.
+
+        ``verify_definite`` also sends definite stage-1 hits to the add-ons (off by
+        default, which follows the data's router); it costs one add-on call per
+        such hit and lets quoted or negated uses of strong terms be re-scored.
         """
         if isinstance(max_stage, bool) or max_stage not in (1, 2, 3):
             raise ValueError("max_stage must be 1, 2 or 3")
@@ -139,6 +144,7 @@ class Engine:
                         stage3=self.stage3,
                         max_stage=max_stage,
                         warnings=warnings,
+                        verify_definite=verify_definite,
                     )
                     scores[c], stages[c], extra[c] = ref.score, ref.stage, ref.extra_signals
             ids = {c: sorted({m.entry.id for m in ms}) for c, ms in groups.items()}

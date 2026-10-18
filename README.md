@@ -124,6 +124,18 @@ and an LLM judge under `tnscope.stage3`. Hits the lexicon cannot decide on its
 own (score below 85, or an ambiguous / `requires_context` hit) are sent to the
 add-on for that language, and the scores are fused per `scoring.yml`.
 
+- `fuse.method: veto` in `scoring.yml` makes a stage 2 score a ceiling when the
+  add-on reports a non-abusive frame (`quotation`, `negation`, or `intent` of
+  `report` / `media` / `discussion`) and otherwise behaves like `max`. The rank
+  floor still applies. The default stays `max`.
+- `verify_definite=True` (CLI `--verify-definite`) also sends definite hits
+  (score 85 or more, not ambiguous) to add-ons. Off by default, which follows
+  the data's router; the rank floor still applies afterwards.
+- Rule-based add-ons can subclass `tnscope.cues.CueScorer` and supply a
+  `CuePatterns` (quote pairs and regexes for quotation, negation, reportage,
+  media, discussion and target cues). The base class owns the scoring policy
+  (score 60, +15 for a target, capped at 20-30 when a non-abusive frame is seen),
+  so all such add-ons score the same way.
 - `max_stage=1` (CLI `--max-stage 1`) disables add-ons; `2` is the default;
   `3` also allows the LLM judge, which may send text to a model, so it is
   opt-in.

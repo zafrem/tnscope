@@ -190,3 +190,104 @@ def test_discovery_skips_incompatible_and_broken(monkeypatch):
         "plugin_incompatible group=tnscope.stage2 name=old",
         "plugin_load_failed group=tnscope.stage2 name=broken error=ImportError",
     ]
+
+
+def test_definite_hit_verified_only_on_request():
+    nlp = FakeNlp(score=5)
+    e = engine(stage2=[nlp])
+    e.scan(DEFINITE, "en")
+    assert nlp.calls == []
+    d = det(e.scan(DEFINITE, "en", verify_definite=True))
+    assert len(nlp.calls) == 1 and d.stage_reached == 2
+
+
+def test_verify_definite_cannot_drop_below_floor_under_weighted(custom_data):
+    import yaml
+    data = custom_data("hate", "en", [])
+    path = data / "scoring" / "scoring.yml"
+    doc = yaml.safe_load(path.read_text())
+    doc["fuse"]["method"] = "weighted"
+    path.write_text(yaml.safe_dump(doc))
+    d = det(Engine(data, stage2=[FakeNlp(score=0)], stage3=[]).scan(
+        DEFINITE, "en", verify_definite=True))
+    assert d.score == 60.0 and d.action == "review"
+
+
+def _veto_engine(custom_data, nlp):
+    import yaml
+    data = custom_data("hate", "en", [])
+    path = data / "scoring" / "scoring.yml"
+    doc = yaml.safe_load(path.read_text())
+    doc["fuse"]["method"] = "veto"
+    path.write_text(yaml.safe_dump(doc))
+    return Engine(data, stage2=[nlp], stage3=[])
+
+
+class FrameNlp(FakeNlp):
+    def __init__(self, score, **signals):
+        super().__init__(score)
+        self._signals = signals
+
+    def score(self, request):
+        self.calls.append(request)
+        return NlpResult(score=self._score, signals=NlpSignals(**self._signals))
+
+
+def test_veto_without_frame_behaves_like_max(custom_data):
+    d = det(_veto_engine(custom_data, FrameNlp(95)).scan(UNDECIDED, "en"))
+    assert d.score == 95.0
+    d = det(_veto_engine(custom_data, FrameNlp(5)).scan(UNDECIDED, "en"))
+    assert d.score == 70.0
+
+
+FRAMES = [
+    {"quotation": True}, {"negation": True},
+    {"intent": "report"}, {"intent": "media"}, {"intent": "discussion"},
+]
+
+
+@pytest.mark.parametrize("signals", FRAMES)
+def test_veto_frame_caps_to_floor_for_rank5_hit(custom_data, signals):
+    # "wetback" is rank 5: the data's rank floor keeps it at 60 (review).
+    d = det(_veto_engine(custom_data, FrameNlp(20, **signals)).scan(UNDECIDED, "en"))
+    assert d.score == 60.0 and d.action == "review" and d.stage_reached == 2
+
+
+@pytest.mark.parametrize("signals", FRAMES)
+def test_veto_frame_clears_hit_below_floor_rank(custom_data, signals):
+    import yaml
+    data = custom_data("hate", "en", [
+        {"id": "hate_en_t001", "concept": 2001, "term": "blorp", "type": "literal",
+         "rank": 3, "ambiguity": 0.0}])
+    path = data / "scoring" / "scoring.yml"
+    doc = yaml.safe_load(path.read_text())
+    doc["fuse"]["method"] = "veto"
+    path.write_text(yaml.safe_dump(doc))
+    e = Engine(data, stage2=[FrameNlp(20, **signals)], stage3=[])
+    d = det(e.scan("You blorp", "en"))
+    assert d.score == 20.0 and d.action == "pass"
+    assert det(Engine(data, stage2=[], stage3=[]).scan("You blorp", "en")).score == 60.0
+
+
+def test_veto_other_intent_is_not_a_frame(custom_data):
+    d = det(_veto_engine(custom_data, FrameNlp(20, intent="threat")).scan(UNDECIDED, "en"))
+    assert d.score == 70.0 and d.action == "review"
+
+
+def test_veto_rank_floor_still_applies_to_definite_hit(custom_data):
+    e = _veto_engine(custom_data, FrameNlp(10, quotation=True))
+    d = det(e.scan(DEFINITE, "en", verify_definite=True))
+    assert d.score == 60.0 and d.action == "review"
+
+
+def test_veto_never_raises_above_stage1(custom_data):
+    d = det(_veto_engine(custom_data, FrameNlp(95, quotation=True)).scan(UNDECIDED, "en"))
+    assert d.score == 70.0
+
+
+def test_judge_can_override_the_frame(custom_data):
+    import yaml
+    e = _veto_engine(custom_data, FrameNlp(30, quotation=True))
+    e.stage3 = [FakeJudge(score=80)]
+    d = det(e.scan(UNDECIDED, "en", max_stage=3))
+    assert d.score == 70.0 and d.stage_reached == 3  # ceiling max(30, 80) > stage 1

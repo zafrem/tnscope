@@ -20,9 +20,16 @@ class Refined:
     extra_signals: dict = field(default_factory=dict)
 
 
-def _fuse(scores: dict[str, float], scoring: dict, has_floor: bool) -> float:
+def _fuse(
+    scores: dict[str, float], scoring: dict, has_floor: bool, frame: bool = False
+) -> float:
     fuse = scoring.get("fuse") or {}
-    if fuse.get("method") == "weighted":
+    method = fuse.get("method")
+    if method == "veto" and frame and len(scores) > 1:
+        # Stage 2/3 saw a non-abusive frame: their (higher) score caps stage 1.
+        ceiling = max(v for k, v in scores.items() if k != "stage1")
+        value = min(scores["stage1"], ceiling)
+    elif method == "weighted":
         weights = fuse["weights"]
         total = sum(weights[k] for k in scores)
         value = sum(weights[k] * v for k, v in scores.items()) / total
@@ -49,16 +56,25 @@ def refine(
     stage3: list,
     max_stage: int,
     warnings: list[str],
+    verify_definite: bool = False,
 ) -> Refined:
-    """Run stages 2 and 3 for one (sentence, concept) when the router says so."""
+    """Run stages 2 and 3 for one (sentence, concept) when the router says so.
+
+    ``verify_definite`` also sends definite hits (score at or above
+    ``router.definite_min``, not ambiguous) to the add-ons, so quoted, negated or
+    reported uses of a strong term can be re-scored. The data's rank floor still
+    applies afterwards.
+    """
     router = scoring.get("router", {})
     undecided = signals.get("ambiguous") or signals.get("requires_context")
-    if max_stage < 2 or (score1 >= router["definite_min"] and not undecided):
+    definite = score1 >= router["definite_min"] and not undecided
+    if max_stage < 2 or (definite and not verify_definite):
         return Refined(score1)
 
     refs = [SpanRef(span=sp, concept=concept) for sp in spans]
     scores = {"stage1": score1}
     out = Refined(score1)
+    frame = False
 
     scorer = next((s for s in stage2 if covers(s, lang)), None)
     if scorer is not None:
@@ -66,6 +82,7 @@ def refine(
             raw = scorer.score(NlpRequest(text=sentence, lang=lang, spans=refs))
             res = raw if isinstance(raw, NlpResult) else NlpResult.model_validate(raw)
             scores["nlp"] = res.score
+            frame = res.non_abusive_frame
             out.stage = 2
             out.extra_signals["nlp"] = res.signals.model_dump(exclude_none=True)
         except Exception as exc:
@@ -95,5 +112,5 @@ def refine(
                     warnings.append(f"stage3_failed lang={lang} error={type(exc).__name__}")
 
     if out.stage > 1:
-        out.score = _fuse(scores, scoring, has_floor)
+        out.score = _fuse(scores, scoring, has_floor, frame)
     return out

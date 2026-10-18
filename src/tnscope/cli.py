@@ -42,6 +42,8 @@ def _build_parser() -> argparse.ArgumentParser:
     s.add_argument("--block", type=_finite, default=None)
     s.add_argument("--review", type=_finite, default=None)
     s.add_argument("--flag", type=_finite, default=None)
+    s.add_argument("--max-stage", type=int, choices=(1, 2, 3), default=2,
+                   help="1 lexicon only, 2 add NLP add-ons (default), 3 also LLM judge (opt-in)")
     return p
 
 
@@ -91,6 +93,7 @@ def _run(args) -> int:
             thresholds=thresholds,
             mask_min_score=args.mask_min,
             mask_char=args.mask_char,
+            max_stage=args.max_stage,
         )
     except ValueError as e:
         print(f"tnscope: error: {e}", file=sys.stderr)

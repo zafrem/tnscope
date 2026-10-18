@@ -11,12 +11,25 @@ from tnscope.match import Matcher
 from tnscope.models import Detection, ScanResult, SentenceResult, Thresholds
 from tnscope.normalize import normalize
 from tnscope.score import context_adjust, prepare_context, score_concept
+from tnscope.router import refine
 from tnscope.sentences import split_sentences
+from tnscope.stages import discover_stage2, discover_stage3
 
 
 class Engine:
-    def __init__(self, data_dir: Path | None = None):
+    def __init__(
+        self,
+        data_dir: Path | None = None,
+        *,
+        stage2: list | None = None,
+        stage3: list | None = None,
+    ):
+        """``stage2``/``stage3`` are scorer objects (see :mod:`tnscope.stages`);
+        when ``None`` they are discovered from installed entry points."""
         self.data = load_data(data_dir)
+        self.plugin_warnings: list[str] = []
+        self.stage2 = discover_stage2(self.plugin_warnings) if stage2 is None else list(stage2)
+        self.stage3 = discover_stage3(self.plugin_warnings) if stage3 is None else list(stage3)
         self._matchers = {
             lang: Matcher(self.data.lexicon.get(lang, [])) for lang in self.data.languages
         }
@@ -34,13 +47,22 @@ class Engine:
         thresholds: Thresholds | None = None,
         mask_min_score: float | None = None,
         mask_char: str = "*",
+        max_stage: int = 2,
     ) -> ScanResult:
         """Scan ``text`` (language ``lang``).
 
         ``thresholds`` defaults to the data's scoring.yml ladder
         (:attr:`default_thresholds`); ``mask_min_score`` defaults to the
         effective thresholds' ``flag`` value.
+
+        ``max_stage`` caps the pipeline: 1 = lexicon only, 2 (default) = also
+        run an installed stage 2 add-on for undecided hits, 3 = additionally
+        allow the LLM judge (opt-in; it may send text to a model). A failing
+        add-on never raises: the previous stage's score stands and a code is
+        appended to ``ScanResult.warnings``.
         """
+        if isinstance(max_stage, bool) or max_stage not in (1, 2, 3):
+            raise ValueError("max_stage must be 1, 2 or 3")
         if lang not in self._matchers:
             raise ValueError(
                 f"unsupported language; supported languages: {', '.join(sorted(self._matchers))}"
@@ -53,8 +75,9 @@ class Engine:
         elif not math.isfinite(mask_min_score):
             raise ValueError("mask_min_score must be a finite number")
         version = self.data.data_version
+        warnings = list(self.plugin_warnings)
         if not text.strip():
-            return ScanResult(sentences=[], masked_text=text, data_version=version)
+            return ScanResult(sentences=[], masked_text=text, data_version=version, warnings=warnings)
 
         norm = normalize(text, self.data.normalize_rules.get(lang, []))
         matches = self._matchers[lang].find(norm.text)
@@ -90,6 +113,34 @@ class Engine:
                 c: score_concept(ms, sent_norm, context_rules, self.data.scoring, adjust=adjust)
                 for c, ms in groups.items()
             }
+            stages: dict[int, int] = {}
+            extra: dict[int, dict] = {}
+            if groups:
+                spans_by_concept: dict[int, list[tuple[int, int]]] = {}
+                for m, span in items:
+                    lst = spans_by_concept.setdefault(m.entry.concept, [])
+                    if span not in lst:
+                        lst.append(span)
+                for c, ms in groups.items():
+                    ref = refine(
+                        score1=scores[c],
+                        signals={
+                            "ambiguous": any(m.entry.ambiguity >= ambiguous_min for m in ms),
+                            "requires_context": any(m.entry.requires_context for m in ms),
+                        },
+                        has_floor=any(m.entry.rank >= self.data.scoring["floor"]["rank"] for m in ms),
+                        lang=lang,
+                        category=ms[0].entry.category,
+                        sentence=text[s:e],
+                        spans=[(a - s, min(b, e) - s) for a, b in spans_by_concept[c]],
+                        concept=c,
+                        scoring=self.data.scoring,
+                        stage2=self.stage2,
+                        stage3=self.stage3,
+                        max_stage=max_stage,
+                        warnings=warnings,
+                    )
+                    scores[c], stages[c], extra[c] = ref.score, ref.stage, ref.extra_signals
             ids = {c: sorted({m.entry.id for m in ms}) for c, ms in groups.items()}
             signals = {
                 c: {
@@ -117,9 +168,9 @@ class Engine:
                         score=score,
                         label=label,
                         action=action,
-                        stage_reached=1,
+                        stage_reached=stages[m.entry.concept],
                         matched_entry_ids=ids[m.entry.concept],
-                        signals=dict(signals[m.entry.concept]),
+                        signals={**signals[m.entry.concept], **extra[m.entry.concept]},
                     )
                 )
                 if score >= mask_min_score:
@@ -136,6 +187,7 @@ class Engine:
             sentences=results,
             masked_text=mask_text(text, mask_spans, mask_char),
             data_version=version,
+            warnings=warnings,
         )
 
 

@@ -16,7 +16,7 @@ class Detection(BaseModel):
     score: float
     label: Label
     action: Action
-    stage_reached: Literal[1] = 1
+    stage_reached: Literal[1, 2, 3] = 1
     matched_entry_ids: list[str]
     signals: dict = Field(default_factory=dict)
 
@@ -32,6 +32,7 @@ class ScanResult(BaseModel):
     sentences: list[SentenceResult]
     masked_text: str
     data_version: str
+    warnings: list[str] = Field(default_factory=list)
 
 
 DEFAULT_BLOCK = 85.0

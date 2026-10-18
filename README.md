@@ -115,3 +115,21 @@ add per language:
 - zh-hans / zh-hant: homophone and variant-character tables.
 
 Obfuscated spellings relying on these will be missed.
+
+## Stage 2 / 3 add-ons
+
+`tnscope` itself has no models. Optional add-on packages (for example
+`tnscope-ko`) register a scorer under the `tnscope.stage2` entry-point group,
+and an LLM judge under `tnscope.stage3`. Hits the lexicon cannot decide on its
+own (score below 85, or an ambiguous / `requires_context` hit) are sent to the
+add-on for that language, and the scores are fused per `scoring.yml`.
+
+- `max_stage=1` (CLI `--max-stage 1`) disables add-ons; `2` is the default;
+  `3` also allows the LLM judge, which may send text to a model, so it is
+  opt-in.
+- A scorer has `api_version = 1`, `langs` (a set of language codes, or `{"*"}`)
+  and `score(NlpRequest)` / `judge(LlmRequest)`. See `tnscope.stages`.
+- Request `text` is the sentence and `spans` are offsets into that sentence.
+- A broken add-on never raises into your scan: the earlier score stands and a
+  code such as `stage2_failed lang=ko error=ValueError` appears in
+  `ScanResult.warnings` (never input text).

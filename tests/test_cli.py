@@ -147,3 +147,7 @@ def test_lower_flag_moves_mask_default(capsys):
     assert data["masked_text"] == "Never say wetback."
     main(["scan", "Never say wetback.", "--lang", "en", "--json", "--flag", "20"])
     assert json.loads(capsys.readouterr().out)["masked_text"] == "Never say *******."
+
+
+def test_max_stage_flag_rejects_bad_value(capsys):
+    assert main(["scan", "x", "--lang", "en", "--max-stage", "4"]) == 2

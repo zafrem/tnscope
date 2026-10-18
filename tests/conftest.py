@@ -25,3 +25,16 @@ def custom_data(tmp_path):
 
     make.root = dest
     return make
+
+
+@pytest.fixture(autouse=True)
+def no_installed_addons(monkeypatch):
+    """Keep the core tests independent of whichever add-ons are pip-installed.
+
+    ``Engine()`` normally discovers ``tnscope.stage2`` / ``tnscope.stage3`` plugins;
+    here it finds none, so a test gets an add-on only by passing one explicitly
+    (``Engine(stage2=[...])``). Discovery itself is tested by calling
+    ``tnscope.stages.discover_stage2`` directly.
+    """
+    monkeypatch.setattr("tnscope.engine.discover_stage2", lambda warnings: [])
+    monkeypatch.setattr("tnscope.engine.discover_stage3", lambda warnings: [])

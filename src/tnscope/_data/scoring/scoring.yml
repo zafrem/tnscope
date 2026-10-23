@@ -4,7 +4,7 @@ rank_weight: [20, 40, 60, 80, 100]
 # corroboration = min((distinct matched entries of the same concept - 1) * step, cap)
 corroboration: {step: 10, cap: 20}
 fuse:
-  method: max          # max | weighted
+  method: max          # max | weighted | veto
   weights: {stage1: 0.4, nlp: 0.3, llm: 0.3}
 # A matched entry with rank >= floor.rank keeps final_score >= floor.min_score.
 floor: {rank: 5, min_score: 60}

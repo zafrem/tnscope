@@ -26,3 +26,28 @@ entries:
   - {id: hate_en_0023, concept: 2005, term: ban all refugees, type: phrase, rank: 4, ambiguity: 0.3, flags: [IGNORECASE]}
   - {id: hate_en_0024, concept: 2005, term: expel all immigrants, type: phrase, rank: 4, ambiguity: 0.25, flags: [IGNORECASE]}
   - {id: hate_en_0025, concept: 2005, term: foreigners are not welcome here, type: phrase, rank: 4, ambiguity: 0.25, flags: [IGNORECASE]}
+  - {id: hate_en_0026, concept: 2001, term: nigger, type: literal, rank: 5, ambiguity: 0.1, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0027, concept: 2001, term: niggers, type: literal, rank: 5, ambiguity: 0.1, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0028, concept: 2001, term: nigga, type: literal, rank: 4, ambiguity: 0.5, requires_context: true, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0029, concept: 2001, term: niggas, type: literal, rank: 4, ambiguity: 0.5, requires_context: true, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0030, concept: 2003, term: kike, type: literal, rank: 5, ambiguity: 0.1, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0031, concept: 2003, term: kikes, type: literal, rank: 5, ambiguity: 0.1, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0032, concept: 2001, term: gook, type: literal, rank: 5, ambiguity: 0.2, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0033, concept: 2001, term: gooks, type: literal, rank: 5, ambiguity: 0.2, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0034, concept: 2001, term: paki, type: literal, rank: 5, ambiguity: 0.2, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0035, concept: 2001, term: towelhead, type: literal, rank: 5, ambiguity: 0.1, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0036, concept: 2001, term: beaner, type: literal, rank: 5, ambiguity: 0.15, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0037, concept: 2001, term: beaners, type: literal, rank: 5, ambiguity: 0.15, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0038, concept: 2001, term: chink, type: literal, rank: 5, ambiguity: 0.5, requires_context: true, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0039, concept: 2001, term: chinks, type: literal, rank: 5, ambiguity: 0.5, requires_context: true, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0040, concept: 2001, term: spic, type: literal, rank: 5, ambiguity: 0.4, requires_context: true, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0041, concept: 2001, term: spics, type: literal, rank: 5, ambiguity: 0.4, requires_context: true, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0042, concept: 2002, term: faggots, type: literal, rank: 5, ambiguity: 0.15, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0043, concept: 2002, term: fag, type: literal, rank: 5, ambiguity: 0.5, requires_context: true, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0044, concept: 2002, term: fags, type: literal, rank: 5, ambiguity: 0.5, requires_context: true, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0045, concept: 2002, term: dyke, type: literal, rank: 4, ambiguity: 0.5, requires_context: true, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0046, concept: 2002, term: dykes, type: literal, rank: 4, ambiguity: 0.5, requires_context: true, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0047, concept: 2002, term: tranny, type: literal, rank: 5, ambiguity: 0.3, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0048, concept: 2002, term: trannies, type: literal, rank: 5, ambiguity: 0.3, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0049, concept: 2004, term: retard, type: literal, rank: 4, ambiguity: 0.45, requires_context: true, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0050, concept: 2004, term: retards, type: literal, rank: 4, ambiguity: 0.45, requires_context: true, flags: [IGNORECASE, WORD_BOUNDARY]}

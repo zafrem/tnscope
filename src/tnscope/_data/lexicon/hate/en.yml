@@ -51,3 +51,10 @@ entries:
   - {id: hate_en_0048, concept: 2002, term: trannies, type: literal, rank: 5, ambiguity: 0.3, flags: [IGNORECASE, WORD_BOUNDARY]}
   - {id: hate_en_0049, concept: 2004, term: retard, type: literal, rank: 4, ambiguity: 0.45, requires_context: true, flags: [IGNORECASE, WORD_BOUNDARY]}
   - {id: hate_en_0050, concept: 2004, term: retards, type: literal, rank: 4, ambiguity: 0.45, requires_context: true, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0051, concept: 2001, term: niggah, type: literal, rank: 4, ambiguity: 0.5, requires_context: true, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0052, concept: 2001, term: niggahs, type: literal, rank: 4, ambiguity: 0.5, requires_context: true, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0053, concept: 2001, term: niggaz, type: literal, rank: 4, ambiguity: 0.5, requires_context: true, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0054, concept: 2001, term: nigguh, type: literal, rank: 4, ambiguity: 0.5, requires_context: true, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0055, concept: 2001, term: nigguhs, type: literal, rank: 4, ambiguity: 0.5, requires_context: true, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0056, concept: 2001, term: nicca, type: literal, rank: 4, ambiguity: 0.5, requires_context: true, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0057, concept: 2001, term: niccas, type: literal, rank: 4, ambiguity: 0.5, requires_context: true, flags: [IGNORECASE, WORD_BOUNDARY]}

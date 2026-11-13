@@ -285,3 +285,18 @@ def test_quoted_sentence_context_not_leaking():
     d = r.sentences[0].detections[0]
     assert d.score == 100.0  # 90 + target_person 15, capped; "never" is in sentence 2
     assert r.sentences[1].detections == []
+
+
+def test_nested_same_concept_span_deduped(custom_data):
+    root = custom_data("hate", "en", [
+        {"id": "hate_en_9010", "concept": 2002, "term": "slurw", "type": "literal",
+         "rank": 5, "ambiguity": 0.0, "flags": ["IGNORECASE"]},
+        {"id": "hate_en_9011", "concept": 2002, "term": "slurw freak", "type": "literal",
+         "rank": 5, "ambiguity": 0.0, "flags": ["IGNORECASE"]},
+    ])
+    r = Engine(data_dir=root).scan("Avoid that slurw freak now.", "en")
+    dets = _dets(r)
+    assert len(dets) == 1
+    assert dets[0].span == (11, 22)
+    assert dets[0].matched_entry_ids == ["hate_en_9010", "hate_en_9011"]
+

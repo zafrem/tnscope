@@ -10,7 +10,9 @@ rules:
   - id: ko_strip_inserted_symbols
     type: strip_between
     chars: [".", "-", "*", "·", "_", "~", "/"]
-    between: "가-힣"
+    between: "가-힣ㄱ-ㅎㅏ-ㅣ"
+  - id: ko_compose_jamo
+    type: compose_jamo
   - id: ko_collapse_repeats
     type: collapse_repeats
     max_run: 2
@@ -21,3 +23,4 @@ fixtures:
   - {input: "사\u200B기꾼", expected: "사기꾼"}
   - {input: "사기꾼꾼꾼", expected: "사기꾼꾼"}
   - {input: "ＯＴＰ번호", expected: "OTP번호"}
+  - {input: "ㅉㅏㅇㄲㅐ", expected: "짱깨"}

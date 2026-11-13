@@ -291,3 +291,38 @@ def test_judge_can_override_the_frame(custom_data):
     e.stage3 = [FakeJudge(score=80)]
     d = det(e.scan(UNDECIDED, "en", max_stage=3))
     assert d.score == 70.0 and d.stage_reached == 3  # ceiling max(30, 80) > stage 1
+
+
+def test_list_plugins_reports_official_and_custom_status(monkeypatch):
+    from tnscope import stages
+
+    class EP:
+        def __init__(self, name, obj):
+            self.name, self._obj = name, obj
+
+        def load(self):
+            if isinstance(self._obj, Exception):
+                raise self._obj
+            return self._obj
+
+    class Old(FakeNlp):
+        api_version = 99
+
+    def fake_eps(group):
+        if group == stages.STAGE2_GROUP:
+            return [
+                EP("en", FakeNlp()),
+                EP("ko", Old()),
+                EP("ja", RuntimeError("boom")),
+                EP("custom", FakeNlp()),
+            ]
+        return []
+
+    monkeypatch.setattr(stages, "entry_points", fake_eps)
+    by_name = {item["name"]: item for item in stages.list_plugins()}
+    assert by_name["en"]["status"] == "ok" and by_name["en"]["installed"] is True
+    assert by_name["ko"]["status"] == "incompatible" and by_name["ko"]["installed"] is False
+    assert by_name["ja"]["status"] == "broken" and by_name["ja"]["installed"] is False
+    assert by_name["zh-hans"]["status"] == "missing" and by_name["zh-hans"]["installed"] is False
+    assert by_name["judge"]["status"] == "missing" and by_name["judge"]["stage"] == 3
+    assert by_name["custom"]["status"] == "ok" and by_name["custom"]["installed"] is True

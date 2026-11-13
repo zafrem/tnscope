@@ -1,15 +1,18 @@
-"""Command-line interface: ``tnscope scan``."""
+"""Command-line interface: ``tnscope scan``, ``tnscope plugins``, ``tnscope install``."""
 
 from __future__ import annotations
 
 import argparse
+import json
 import math
+import subprocess
 import sys
 
 from pydantic import ValidationError
 
 from tnscope.engine import default_engine
 from tnscope.models import Thresholds
+from tnscope.stages import install_plugins, list_plugins
 
 
 class _Parser(argparse.ArgumentParser):
@@ -46,6 +49,22 @@ def _build_parser() -> argparse.ArgumentParser:
                    help="also send definite lexicon hits to stage 2 add-ons")
     s.add_argument("--max-stage", type=int, choices=(1, 2, 3), default=2,
                    help="1 lexicon only, 2 add NLP add-ons (default), 3 also LLM judge (opt-in)")
+
+    pl = sub.add_parser("plugins", help="list stage 2/3 add-on plugins and their status")
+    pl.add_argument("--json", action="store_true")
+
+    inst = sub.add_parser(
+        "install",
+        help="install language add-on packages (en, ko, ja, zh-hans, zh-hant, judge, or all)",
+    )
+    inst.add_argument(
+        "targets",
+        nargs="+",
+        metavar="PLUGIN",
+        help="language code(s), 'judge', or 'all'",
+    )
+    inst.add_argument("--upgrade", "-U", action="store_true", help="upgrade already-installed add-ons")
+    inst.add_argument("--dry-run", action="store_true", help="print packages to install without running pip")
     return p
 
 
@@ -53,7 +72,39 @@ def _fmt(x: float) -> str:
     return f"{x:g}"
 
 
+def _run_plugins(args) -> int:
+    items = list_plugins()
+    if args.json:
+        print(json.dumps(items))
+        return 0
+    for item in items:
+        ver = f" ({item['version']})" if item["version"] else ""
+        langs = ",".join(item["langs"])
+        print(f"{item['name']:<8}  stage {item['stage']}  {item['package']}{ver:<10}  [{item['status']}]  langs={langs}")
+    return 0
+
+
+def _run_install(args) -> int:
+    try:
+        pkgs = install_plugins(args.targets, upgrade=args.upgrade, dry_run=args.dry_run)
+    except ValueError as e:
+        print(f"tnscope: error: {e}", file=sys.stderr)
+        return 2
+    except subprocess.CalledProcessError as e:
+        print(f"tnscope: error: pip install failed (exit code {e.returncode})", file=sys.stderr)
+        return 1
+    if args.dry_run:
+        print(" ".join(pkgs))
+    else:
+        print(f"installed: {' '.join(pkgs)}")
+    return 0
+
+
 def _run(args) -> int:
+    if args.command == "plugins":
+        return _run_plugins(args)
+    if args.command == "install":
+        return _run_install(args)
     if len(args.mask_char) != 1:
         print("tnscope: error: --mask-char must be a single character", file=sys.stderr)
         return 2

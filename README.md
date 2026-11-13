@@ -18,7 +18,17 @@ The caller decides what to do with the result.
 ## Install
 
 ```bash
-pip install tnscope        # Python >= 3.11
+pip install tnscope               # Python >= 3.11 (stage 1 core only)
+pip install "tnscope[ko,en]"      # with language add-ons (en, ko, ja, zh-hans, zh-hant, judge)
+pip install "tnscope[all]"        # core + all language add-ons + judge
+```
+
+Or install language add-ons at any time from the CLI:
+
+```bash
+tnscope plugins                   # list installed and available add-ons
+tnscope install ko                # install tnscope-ko
+tnscope install all               # install all add-ons
 ```
 
 For development: `pip install -e ".[dev]"`.
@@ -64,10 +74,13 @@ tnscope scan "Go back, wetback." --lang en
 tnscope scan "Go back, wetback." --lang en --json
 tnscope scan --lang ko --file input.txt
 echo "text" | tnscope scan --lang ja
+
+tnscope plugins [--json]
+tnscope install ko [en ja zh-hans zh-hant judge | all] [--upgrade] [--dry-run]
 ```
 
-Options: `--lang` (required), `--file`, `--json`, `--mask-min`, `--mask-char`,
-`--block`, `--review`, `--flag`. Input is read from the TEXT argument, `--file`
+Options for `scan`: `--lang` (required), `--file`, `--json`, `--mask-min`, `--mask-char`,
+`--block`, `--review`, `--flag`, `--verify-definite`, `--max-stage`. Input is read from the TEXT argument, `--file`
 or stdin (UTF-8). Numeric options must be finite numbers, and the thresholds
 must satisfy `flag <= review <= block`; otherwise the exit code is 2.
 

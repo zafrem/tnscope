@@ -151,3 +151,64 @@ def test_lower_flag_moves_mask_default(capsys):
 
 def test_max_stage_flag_rejects_bad_value(capsys):
     assert main(["scan", "x", "--lang", "en", "--max-stage", "4"]) == 2
+
+
+def test_plugins_json_and_text(capsys):
+    assert main(["plugins", "--json"]) == 0
+    items = json.loads(capsys.readouterr().out)
+    names = [it["name"] for it in items]
+    assert {"en", "ko", "ja", "zh-hans", "zh-hant", "judge"}.issubset(names)
+
+    assert main(["plugins"]) == 0
+    text_out = capsys.readouterr().out
+    assert "tnscope-ko" in text_out and "tnscope-judge" in text_out
+
+
+def test_install_dry_run(capsys):
+    assert main(["install", "ko", "en", "--dry-run"]) == 0
+    assert capsys.readouterr().out.strip() == "tnscope-ko tnscope-en"
+
+    assert main(["install", "all", "--dry-run"]) == 0
+    out = capsys.readouterr().out.strip().split()
+    assert out == [
+        "tnscope-en",
+        "tnscope-ko",
+        "tnscope-ja",
+        "tnscope-zh-hans",
+        "tnscope-zh-hant",
+        "tnscope-judge",
+    ]
+
+
+def test_install_runs_pip_and_resets_engine(monkeypatch, capsys):
+    from tnscope import stages
+
+    calls = []
+
+    def fake_run(cmd, check):
+        calls.append((cmd, check))
+
+    monkeypatch.setattr(stages.subprocess, "run", fake_run)
+    assert main(["install", "ko", "--upgrade"]) == 0
+    assert len(calls) == 1
+    cmd, check = calls[0]
+    assert check is True
+    assert cmd == [sys.executable, "-m", "pip", "install", "--upgrade", "tnscope-ko"]
+    assert "installed: tnscope-ko" in capsys.readouterr().out
+
+
+def test_install_unknown_plugin_exits_2(capsys):
+    assert main(["install", "fr"]) == 2
+    err = capsys.readouterr().err
+    assert "unknown plugin" in err and "choose from:" in err
+
+
+def test_install_pip_failure_exits_1(monkeypatch, capsys):
+    from tnscope import stages
+
+    def fail_run(cmd, check):
+        raise subprocess.CalledProcessError(returncode=1, cmd=cmd)
+
+    monkeypatch.setattr(stages.subprocess, "run", fail_run)
+    assert main(["install", "ko"]) == 1
+    assert "pip install failed" in capsys.readouterr().err

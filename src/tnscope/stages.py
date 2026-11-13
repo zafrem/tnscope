@@ -10,7 +10,10 @@ whole input.
 """
 from __future__ import annotations
 
-from importlib.metadata import entry_points
+from collections.abc import Iterable, Sequence
+from importlib.metadata import PackageNotFoundError, entry_points, version as pkg_version
+import subprocess
+import sys
 from typing import Protocol, runtime_checkable
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -21,6 +24,15 @@ STAGE3_GROUP = "tnscope.stage3"
 ANY_LANG = "*"
 # NlpSignals.intent values that mean "the term is not being used abusively".
 NON_ABUSIVE_INTENTS = frozenset({"report", "media", "discussion"})
+
+ADDON_PACKAGES: dict[str, str] = {
+    "en": "tnscope-en",
+    "ko": "tnscope-ko",
+    "ja": "tnscope-ja",
+    "zh-hans": "tnscope-zh-hans",
+    "zh-hant": "tnscope-zh-hant",
+    "judge": "tnscope-judge",
+}
 
 
 class SpanRef(BaseModel):
@@ -117,3 +129,142 @@ def discover_stage2(warnings: list[str]) -> list:
 
 def discover_stage3(warnings: list[str]) -> list:
     return _discover(STAGE3_GROUP, "judge", warnings)
+
+
+def _pkg_ver(package: str) -> str | None:
+    try:
+        return pkg_version(package)
+    except PackageNotFoundError:
+        return None
+
+
+def list_plugins() -> list[dict]:
+    """Return status records for known official add-ons and any other installed plugins."""
+    ep_by_group: dict[tuple[str, str], object] = {}
+    for group in (STAGE2_GROUP, STAGE3_GROUP):
+        for ep in entry_points(group=group):
+            ep_by_group[(group, ep.name)] = ep
+
+    items: list[dict] = []
+    seen_eps: set[tuple[str, str]] = set()
+    for name, package in ADDON_PACKAGES.items():
+        stage = 3 if name == "judge" else 2
+        group = STAGE3_GROUP if stage == 3 else STAGE2_GROUP
+        method = "judge" if stage == 3 else "score"
+        ep = ep_by_group.get((group, name))
+        seen_eps.add((group, name))
+        ver = _pkg_ver(package)
+        if ep is None:
+            items.append({
+                "name": name,
+                "package": package,
+                "stage": stage,
+                "langs": ["*"] if stage == 3 else [name],
+                "installed": False,
+                "version": ver,
+                "status": "missing",
+            })
+            continue
+        status = "ok"
+        langs = ["*"] if stage == 3 else [name]
+        try:
+            obj = ep.load()
+            scorer = obj() if isinstance(obj, type) else obj
+            if not callable(getattr(scorer, method, None)):
+                status = "broken"
+            elif getattr(scorer, "api_version", None) != API_VERSION:
+                status = "incompatible"
+            else:
+                raw_langs = getattr(scorer, "langs", ())
+                if raw_langs:
+                    langs = sorted(raw_langs)
+        except Exception:
+            status = "broken"
+        items.append({
+            "name": name,
+            "package": package,
+            "stage": stage,
+            "langs": langs,
+            "installed": status == "ok",
+            "version": ver,
+            "status": status,
+        })
+
+    # Include any third-party entry-point plugins not in ADDON_PACKAGES
+    for (group, name), ep in sorted(ep_by_group.items()):
+        if (group, name) in seen_eps:
+            continue
+        stage = 3 if group == STAGE3_GROUP else 2
+        method = "judge" if stage == 3 else "score"
+        dist = getattr(ep, "dist", None)
+        package = getattr(dist, "name", None) or name
+        ver = getattr(dist, "version", None)
+        status = "ok"
+        langs: list[str] = []
+        try:
+            obj = ep.load()
+            scorer = obj() if isinstance(obj, type) else obj
+            if not callable(getattr(scorer, method, None)):
+                status = "broken"
+            elif getattr(scorer, "api_version", None) != API_VERSION:
+                status = "incompatible"
+            else:
+                langs = sorted(getattr(scorer, "langs", ()))
+        except Exception:
+            status = "broken"
+        items.append({
+            "name": name,
+            "package": package,
+            "stage": stage,
+            "langs": langs,
+            "installed": status == "ok",
+            "version": ver,
+            "status": status,
+        })
+    return items
+
+
+def resolve_addon_packages(targets: Iterable[str]) -> list[str]:
+    """Resolve plugin target names (e.g. ``['ko', 'en']`` or ``['all']``) to package names."""
+    pkgs: list[str] = []
+    valid = sorted([*ADDON_PACKAGES.keys(), "all"])
+    for raw in targets:
+        t = raw.strip().lower()
+        if not t:
+            continue
+        if t == "all":
+            for pkg in ADDON_PACKAGES.values():
+                if pkg not in pkgs:
+                    pkgs.append(pkg)
+        elif t in ADDON_PACKAGES:
+            pkg = ADDON_PACKAGES[t]
+            if pkg not in pkgs:
+                pkgs.append(pkg)
+        else:
+            raise ValueError(f"unknown plugin {raw!r}; choose from: {', '.join(valid)}")
+    if not pkgs:
+        raise ValueError(f"no plugin specified; choose from: {', '.join(valid)}")
+    return pkgs
+
+
+def install_plugins(
+    targets: Iterable[str],
+    *,
+    upgrade: bool = False,
+    dry_run: bool = False,
+    pip_args: Sequence[str] = (),
+) -> list[str]:
+    """Install one or more official tnscope add-on packages via ``pip`` and reset the default engine."""
+    pkgs = resolve_addon_packages(targets)
+    if dry_run:
+        return pkgs
+    cmd = [sys.executable, "-m", "pip", "install"]
+    if upgrade:
+        cmd.append("--upgrade")
+    cmd.extend(pip_args)
+    cmd.extend(pkgs)
+    subprocess.run(cmd, check=True)
+    from tnscope.engine import reset_default_engine
+
+    reset_default_engine()
+    return pkgs

@@ -28,6 +28,20 @@ classifiers = [
 ]
 
 [project.optional-dependencies]
+en = ["tnscope-en"]
+ko = ["tnscope-ko"]
+ja = ["tnscope-ja"]
+zh-hans = ["tnscope-zh-hans"]
+zh-hant = ["tnscope-zh-hant"]
+judge = ["tnscope-judge"]
+all = [
+    "tnscope-en",
+    "tnscope-ko",
+    "tnscope-ja",
+    "tnscope-zh-hans",
+    "tnscope-zh-hant",
+    "tnscope-judge",
+]
 dev = ["pytest", "jsonschema"]
 
 [project.scripts]

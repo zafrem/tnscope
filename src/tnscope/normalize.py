@@ -41,6 +41,43 @@ def _class_body(between: str) -> str:
 
 
 _JAMO_V_T = ((0x1160, 0x11FF), (0xD7B0, 0xD7FF))
+_CHOSEONG = "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ"
+_JUNGSEONG = "ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ"
+_JONGSEONG = (
+    "", "ㄱ", "ㄲ", "ㄳ", "ㄴ", "ㄵ", "ㄶ", "ㄷ", "ㄹ", "ㄺ", "ㄻ", "ㄼ", "ㄽ", "ㄾ", "ㄿ", "ㅀ",
+    "ㅁ", "ㅂ", "ㅄ", "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ",
+)
+
+
+def _compose_jamo(chars: list[str], origin: list[int], origin_end: list[int]):
+    """Compose compatibility Hangul jamo (L+V[+T]) into precomposed syllables."""
+    n = len(chars)
+    nc: list[str] = []
+    no: list[int] = []
+    ne: list[int] = []
+    i = 0
+    while i < n:
+        c = chars[i]
+        l_idx = _CHOSEONG.find(c)
+        if l_idx != -1 and i + 1 < n:
+            v_idx = _JUNGSEONG.find(chars[i + 1])
+            if v_idx != -1:
+                t_idx = 0
+                step = 2
+                if i + 2 < n and chars[i + 2] in _JONGSEONG[1:]:
+                    if i + 3 >= n or _JUNGSEONG.find(chars[i + 3]) == -1:
+                        t_idx = _JONGSEONG.index(chars[i + 2])
+                        step = 3
+                nc.append(chr(0xAC00 + (l_idx * 21 + v_idx) * 28 + t_idx))
+                no.append(origin[i])
+                ne.append(origin_end[i + step - 1])
+                i += step
+                continue
+        nc.append(c)
+        no.append(origin[i])
+        ne.append(origin_end[i])
+        i += 1
+    return nc, no, ne
 
 
 @lru_cache(maxsize=65536)
@@ -153,6 +190,8 @@ def _apply(chars: list[str], origin: list[int], origin_end: list[int], rule: dic
         return [mapping.get(c, c) for c in chars], origin, origin_end
     elif kind == "nfkc":
         return _nfkc(chars, origin, origin_end)
+    elif kind == "compose_jamo":
+        return _compose_jamo(chars, origin, origin_end)
     elif kind == "strip_between":
         b = _class_body(rule["between"])
         c = "".join(re.escape(x) for x in rule["chars"])

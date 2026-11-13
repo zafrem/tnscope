@@ -136,3 +136,14 @@ def test_collapse_rejects_non_positive_max_run():
     with pytest.raises(ValueError) as e:
         normalize("secret", [{"id": "c0", "type": "collapse_repeats", "max_run": 0}])
     assert "c0" in str(e.value) and "secret" not in str(e.value)
+
+
+def test_compose_jamo_tracks_original_spans():
+    rules = load_data().normalize_rules["ko"]
+    src = "앞 ㅉㅏㅇㄲㅐ 뒤"
+    n = normalize(src, rules)
+    assert n.text == "앞 짱깨 뒤"
+    i = n.text.index("짱깨")
+    assert n.to_original_span(i, i + 2) == (2, 7)
+    assert src[2:7] == "ㅉㅏㅇㄲㅐ"
+

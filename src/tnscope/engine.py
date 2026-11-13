@@ -135,6 +135,11 @@ class Engine:
                     lst = spans_by_concept.setdefault(m.entry.concept, [])
                     if span not in lst:
                         lst.append(span)
+                for c, lst in spans_by_concept.items():
+                    spans_by_concept[c] = [
+                        sp for sp in lst
+                        if not any(other != sp and other[0] <= sp[0] and sp[1] <= other[1] for other in lst)
+                    ]
                 for c, ms in groups.items():
                     ref = refine(
                         score1=scores[c],
@@ -164,13 +169,22 @@ class Engine:
                 }
                 for c, ms in groups.items()
             }
-            # One detection per (original span, concept): the highest-rank entry.
+            # One detection per (original span, concept): the highest-rank entry,
+            # dropping spans strictly nested inside a wider span of the same concept.
             unique: dict[tuple, tuple] = {}
             for m, span in items:
                 key = (span, m.entry.concept)
                 prev = unique.get(key)
                 if prev is None or m.entry.rank > prev[0].entry.rank:
                     unique[key] = (m, span)
+            unique = {
+                (span, c): val
+                for (span, c), val in unique.items()
+                if not any(
+                    c2 == c and s2 != span and s2[0] <= span[0] and span[1] <= s2[1]
+                    for (s2, c2) in unique
+                )
+            }
             detections: list[Detection] = []
             for m, span in unique.values():
                 score = scores[m.entry.concept]
@@ -215,6 +229,12 @@ def default_engine() -> Engine:
     if _default is None:
         _default = Engine()
     return _default
+
+
+def reset_default_engine() -> None:
+    """Clear the cached module-level Engine so newly installed plugins are discovered."""
+    global _default
+    _default = None
 
 
 def scan(text: str, lang: str, **kwargs) -> ScanResult:

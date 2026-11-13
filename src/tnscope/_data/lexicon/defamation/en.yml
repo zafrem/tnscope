@@ -26,3 +26,7 @@ entries:
   - {id: defamation_en_0023, concept: 1003, term: reveal where you live, type: phrase, rank: 4, ambiguity: 0.3, flags: [IGNORECASE]}
   - {id: defamation_en_0024, concept: 1003, term: leak your nudes, type: phrase, rank: 4, ambiguity: 0.15, flags: [IGNORECASE]}
   - {id: defamation_en_0025, concept: 1003, term: post your workplace address, type: phrase, rank: 4, ambiguity: 0.25, flags: [IGNORECASE]}
+  - {id: defamation_en_0026, concept: 1001, term: worthless degenerate, type: phrase, rank: 3, ambiguity: 0.3, flags: [IGNORECASE]}
+  - {id: defamation_en_0027, concept: 1002, term: money launderer, type: phrase, rank: 2, ambiguity: 0.6, requires_context: true, flags: [IGNORECASE]}
+  - {id: defamation_en_0028, concept: 1002, term: child molester, type: phrase, rank: 3, ambiguity: 0.55, requires_context: true, flags: [IGNORECASE]}
+  - {id: defamation_en_0029, concept: 1003, term: dox your address, type: phrase, rank: 4, ambiguity: 0.2, flags: [IGNORECASE]}

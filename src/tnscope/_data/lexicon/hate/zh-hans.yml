@@ -26,3 +26,9 @@ entries:
   - {id: hate_zh-hans_0023, concept: 2005, term: 把外国人全部驱逐出境, type: literal, rank: 4, ambiguity: 0.25}
   - {id: hate_zh-hans_0024, concept: 2005, term: 乡下人滚回农村, type: literal, rank: 4, ambiguity: 0.2}
   - {id: hate_zh-hans_0025, concept: 2005, term: 禁止外地人入内, type: literal, rank: 4, ambiguity: 0.25}
+  - {id: hate_zh-hans_0026, concept: 2001, term: 死黑鬼, type: literal, rank: 5, ambiguity: 0.1}
+  - {id: hate_zh-hans_0027, concept: 2001, term: 讨厌黑人, type: literal, rank: 4, ambiguity: 0.35, requires_context: true}
+  - {id: hate_zh-hans_0028, concept: 2002, term: 直男癌, type: literal, rank: 3, ambiguity: 0.45, requires_context: true}
+  - {id: hate_zh-hans_0029, concept: 2002, term: 女拳母狗, type: literal, rank: 5, ambiguity: 0.15}
+  - {id: hate_zh-hans_0030, concept: 2003, term: 邪教狂热分子, type: literal, rank: 5, ambiguity: 0.2}
+  - {id: hate_zh-hans_0031, concept: 2004, term: 残障废物, type: literal, rank: 5, ambiguity: 0.1}

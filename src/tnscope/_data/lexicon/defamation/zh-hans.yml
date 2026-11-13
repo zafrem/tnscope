@@ -26,3 +26,7 @@ entries:
   - {id: defamation_zh-hans_0023, concept: 1003, term: 把你手机号发网上, type: literal, rank: 4, ambiguity: 0.2}
   - {id: defamation_zh-hans_0024, concept: 1003, term: 曝光你家人的工作单位, type: literal, rank: 4, ambiguity: 0.2}
   - {id: defamation_zh-hans_0025, concept: 1003, term: 泄露你的个人隐私, type: literal, rank: 4, ambiguity: 0.25}
+  - {id: defamation_zh-hans_0026, concept: 1001, term: 社会败类, type: literal, rank: 3, ambiguity: 0.3}
+  - {id: defamation_zh-hans_0027, concept: 1001, term: 道德败坏的畜生, type: literal, rank: 3, ambiguity: 0.25}
+  - {id: defamation_zh-hans_0028, concept: 1002, term: 洗钱犯, type: literal, rank: 2, ambiguity: 0.6, requires_context: true}
+  - {id: defamation_zh-hans_0029, concept: 1003, term: 全网挂你照片, type: literal, rank: 4, ambiguity: 0.2}

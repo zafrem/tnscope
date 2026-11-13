@@ -26,3 +26,7 @@ entries:
   - {id: defamation_zh-hant_0023, concept: 1003, term: 把你手機號發網上, type: literal, rank: 4, ambiguity: 0.2}
   - {id: defamation_zh-hant_0024, concept: 1003, term: 曝光你家人的工作單位, type: literal, rank: 4, ambiguity: 0.2}
   - {id: defamation_zh-hant_0025, concept: 1003, term: 洩露你的個人隱私, type: literal, rank: 4, ambiguity: 0.25}
+  - {id: defamation_zh-hant_0026, concept: 1001, term: 社會敗類, type: literal, rank: 3, ambiguity: 0.3}
+  - {id: defamation_zh-hant_0027, concept: 1001, term: 道德敗壞的畜生, type: literal, rank: 3, ambiguity: 0.25}
+  - {id: defamation_zh-hant_0028, concept: 1002, term: 洗錢犯, type: literal, rank: 2, ambiguity: 0.6, requires_context: true}
+  - {id: defamation_zh-hant_0029, concept: 1003, term: 全網掛你照片, type: literal, rank: 4, ambiguity: 0.2}

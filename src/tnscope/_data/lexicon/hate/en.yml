@@ -58,3 +58,9 @@ entries:
   - {id: hate_en_0055, concept: 2001, term: nigguhs, type: literal, rank: 4, ambiguity: 0.5, requires_context: true, flags: [IGNORECASE, WORD_BOUNDARY]}
   - {id: hate_en_0056, concept: 2001, term: nicca, type: literal, rank: 4, ambiguity: 0.5, requires_context: true, flags: [IGNORECASE, WORD_BOUNDARY]}
   - {id: hate_en_0057, concept: 2001, term: niccas, type: literal, rank: 4, ambiguity: 0.5, requires_context: true, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0058, concept: 2001, term: porch monkey, type: phrase, rank: 5, ambiguity: 0.1, flags: [IGNORECASE]}
+  - {id: hate_en_0059, concept: 2001, term: sandnigger, type: literal, rank: 5, ambiguity: 0.1, flags: [IGNORECASE, WORD_BOUNDARY]}
+  - {id: hate_en_0060, concept: 2002, term: shemale freak, type: phrase, rank: 5, ambiguity: 0.1, flags: [IGNORECASE]}
+  - {id: hate_en_0061, concept: 2003, term: jihadi vermin, type: phrase, rank: 5, ambiguity: 0.1, flags: [IGNORECASE]}
+  - {id: hate_en_0062, concept: 2004, term: window licker, type: phrase, rank: 4, ambiguity: 0.3, flags: [IGNORECASE]}
+  - {id: hate_en_0063, concept: 2005, term: send all illegals back, type: phrase, rank: 4, ambiguity: 0.25, flags: [IGNORECASE]}

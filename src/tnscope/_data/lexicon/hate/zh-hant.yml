@@ -26,3 +26,9 @@ entries:
   - {id: hate_zh-hant_0023, concept: 2005, term: 把外國人全部驅逐出境, type: literal, rank: 4, ambiguity: 0.25}
   - {id: hate_zh-hant_0024, concept: 2005, term: 鄉下人滾回農村, type: literal, rank: 4, ambiguity: 0.2}
   - {id: hate_zh-hant_0025, concept: 2005, term: 禁止外地人入內, type: literal, rank: 4, ambiguity: 0.25}
+  - {id: hate_zh-hant_0026, concept: 2001, term: 死黑鬼, type: literal, rank: 5, ambiguity: 0.1}
+  - {id: hate_zh-hant_0027, concept: 2001, term: 討厭黑人, type: literal, rank: 4, ambiguity: 0.35, requires_context: true}
+  - {id: hate_zh-hant_0028, concept: 2002, term: 直男癌, type: literal, rank: 3, ambiguity: 0.45, requires_context: true}
+  - {id: hate_zh-hant_0029, concept: 2002, term: 女拳母狗, type: literal, rank: 5, ambiguity: 0.15}
+  - {id: hate_zh-hant_0030, concept: 2003, term: 邪教狂熱分子, type: literal, rank: 5, ambiguity: 0.2}
+  - {id: hate_zh-hant_0031, concept: 2004, term: 殘障廢物, type: literal, rank: 5, ambiguity: 0.1}

@@ -26,3 +26,9 @@ entries:
   - {id: hate_ko_0023, concept: 2005, term: 난민 수용 절대 반대, type: phrase, rank: 3, ambiguity: 0.5, requires_context: true}
   - {id: hate_ko_0024, concept: 2005, term: 불법체류자 전부 내쫓아라, type: phrase, rank: 4, ambiguity: 0.25}
   - {id: hate_ko_0025, concept: 2005, term: 이민자 출입 금지시켜라, type: phrase, rank: 4, ambiguity: 0.25}
+  - {id: hate_ko_0026, concept: 2002, term: 한남들, type: literal, rank: 4, ambiguity: 0.35, requires_context: true}
+  - {id: hate_ko_0027, concept: 2002, term: 메갈, type: literal, rank: 4, ambiguity: 0.35, requires_context: true}
+  - {id: hate_ko_0028, concept: 2002, term: 쿵쾅이, type: literal, rank: 4, ambiguity: 0.3}
+  - {id: hate_ko_0029, concept: 2001, term: 섬짱깨, type: literal, rank: 5, ambiguity: 0.15}
+  - {id: hate_ko_0030, concept: 2003, term: 사이비 광신도, type: phrase, rank: 4, ambiguity: 0.3}
+  - {id: hate_ko_0031, concept: 2004, term: 병신 장애인, type: phrase, rank: 5, ambiguity: 0.1}

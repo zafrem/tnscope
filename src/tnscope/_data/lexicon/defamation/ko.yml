@@ -26,3 +26,7 @@ entries:
   - {id: defamation_ko_0023, concept: 1003, term: 전화번호 박제한다, type: phrase, rank: 4, ambiguity: 0.2}
   - {id: defamation_ko_0024, concept: 1003, term: 사생활 사진 유포, type: phrase, rank: 4, ambiguity: 0.2}
   - {id: defamation_ko_0025, concept: 1003, term: 직장 주소 공개한다, type: phrase, rank: 4, ambiguity: 0.25}
+  - {id: defamation_ko_0026, concept: 1001, term: 기레기, type: literal, rank: 3, ambiguity: 0.35, requires_context: true}
+  - {id: defamation_ko_0027, concept: 1001, term: 개돼지, type: literal, rank: 3, ambiguity: 0.4, requires_context: true}
+  - {id: defamation_ko_0028, concept: 1002, term: 마약사범, type: literal, rank: 2, ambiguity: 0.6, requires_context: true}
+  - {id: defamation_ko_0029, concept: 1003, term: 계좌번호 박제한다, type: phrase, rank: 4, ambiguity: 0.2}

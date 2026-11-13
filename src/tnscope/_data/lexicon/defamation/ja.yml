@@ -26,3 +26,7 @@ entries:
   - {id: defamation_ja_0023, concept: 1003, term: プライベート写真を拡散する, type: literal, rank: 4, ambiguity: 0.2}
   - {id: defamation_ja_0024, concept: 1003, term: 自宅を特定した, type: literal, rank: 4, ambiguity: 0.3}
   - {id: defamation_ja_0025, concept: 1003, term: 身元をネットに公開する, type: literal, rank: 4, ambiguity: 0.25}
+  - {id: defamation_ja_0026, concept: 1001, term: 人間のゴミ, type: literal, rank: 3, ambiguity: 0.3}
+  - {id: defamation_ja_0027, concept: 1001, term: 売国奴, type: literal, rank: 3, ambiguity: 0.4, requires_context: true}
+  - {id: defamation_ja_0028, concept: 1002, term: 痴漢常習犯, type: literal, rank: 3, ambiguity: 0.5, requires_context: true}
+  - {id: defamation_ja_0029, concept: 1003, term: 晒し上げてやる, type: literal, rank: 4, ambiguity: 0.25}

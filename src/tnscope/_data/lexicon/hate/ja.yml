@@ -26,3 +26,9 @@ entries:
   - {id: hate_ja_0023, concept: 2005, term: 移民を全員追放しろ, type: literal, rank: 4, ambiguity: 0.2}
   - {id: hate_ja_0024, concept: 2005, term: 外国人お断り出て行け, type: literal, rank: 4, ambiguity: 0.2}
   - {id: hate_ja_0025, concept: 2005, term: 難民を叩き出せ, type: literal, rank: 4, ambiguity: 0.2}
+  - {id: hate_ja_0026, concept: 2001, term: キムチ野郎, type: literal, rank: 5, ambiguity: 0.15}
+  - {id: hate_ja_0027, concept: 2001, term: クロンボ, type: literal, rank: 5, ambiguity: 0.15}
+  - {id: hate_ja_0028, concept: 2002, term: まんさん, type: literal, rank: 4, ambiguity: 0.35, requires_context: true}
+  - {id: hate_ja_0029, concept: 2003, term: カルト狂信者, type: literal, rank: 5, ambiguity: 0.2}
+  - {id: hate_ja_0030, concept: 2004, term: ガイジ, type: literal, rank: 5, ambiguity: 0.2}
+  - {id: hate_ja_0031, concept: 2005, term: 不法滞在者を追い出せ, type: literal, rank: 4, ambiguity: 0.2}
